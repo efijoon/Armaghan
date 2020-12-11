@@ -1,0 +1,115 @@
+ 
+<div class="main-panel ps">
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top ">
+    <div class="container-fluid">
+      <div class="navbar-wrapper">
+        <div class="navbar-minimize">
+          <button id="minimizeSidebar" class="btn btn-just-icon btn-white btn-fab btn-round">
+            <i class="material-icons text_align-center visible-on-sidebar-regular">more_vert</i>
+            <i class="material-icons design_bullet-list-67 visible-on-sidebar-mini">view_list</i>
+          </button>
+        </div>
+        <a class="navbar-brand" href="javascript:;" dideo-checked="true">صفحه کاربری</a>
+      </div>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="navbar-toggler-icon icon-bar"></span>
+        <span class="navbar-toggler-icon icon-bar"></span>
+        <span class="navbar-toggler-icon icon-bar"></span>
+      </button>
+
+    </div>
+  </nav>
+  <!-- End Navbar -->
+  <div class="content">
+    <div class="container-fluid">
+      <div class="row" style="text-align: right;">
+        <div class="col-md-8">
+          <div class="card">
+            <div class="card-header card-header-icon card-header-rose">
+              <div class="card-icon">
+                <i class="material-icons">perm_identity</i>
+              </div>
+              <h4 class="card-title">پروفایل کاربر
+                <small class="category">(پروفایل خود را جهت خرید آسان تر کامل کنید...)</small>
+              </h4>
+            </div>
+            <div class="card-body">
+              <form action="/dashboard/updateProfile" method="POST">
+                <div class="row mt-4">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label class="bmd-label-floating">نام</label>
+                      <input type="text" name="name" value="<%= req.user.name %>" class="form-control">
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label class="bmd-label-floating">نام خوانوادگی</label>
+                      <input type="text" name="family" value="<%= req.user.family %>" class="form-control">
+                    </div>
+                  </div>
+                </div>
+                <div class="row my-4">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <label class="bmd-label-floating">ایمیل</label>
+                      <input type="text" name="email" value="<%= req.user.email %>" class="form-control">
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <label class="bmd-label-floating">تلفن پشتیبانی</label>
+                      <input type="text" name="telephone" value="<%= req.user.telephone %>" class="form-control">
+                    </div>
+                  </div>
+                </div>
+                <div class="row mt-4">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <label>آدرس</label>
+                      <div class="form-group">
+                        <label class="bmd-label-floating">مثال: ایران، اصفهان، خیابان کاوه، خیابان بهار، کوچه گلستان(5)، بن بست بهار، پلاک 6، زنگ 2</label>
+                        <textarea class="form-control" name="address" rows="5"><%= req.user.address %></textarea>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <button type="submit" class="btn btn-rose pull-right">تغییر پروفایل</button>
+                <div class="clearfix"></div>
+              </form>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card card-profile">
+            <div class="card-avatar">
+              <a href="#pablo">
+                <img class="img" src="/<%= req.user.image %>"/>
+              </a>
+            </div>
+            <form action="/uploadProfileImage" method="POST" enctype="multipart/form-data">
+              <div class="card-body">
+                <h5 class="mt-5">توجه: برای بهتر قرار گرفتن عکس پروفایل خود را در ابعاد 300 * 300 پیکسل وارد کنید.</h5>
+                <!-- <h4 class="card-title mt-5"><%= req.user.name + ' ' + req.user.family %></h4> -->
+                <label for="image-uploader" class="btn btn-rose btn-round mt-3">انتخاب عکس</label>
+                <input type="file" id="image-uploader" name="image-uploader" hidden required></input>
+                <button class="btn btn-primary mt-3">تغییر عکس پروفایل</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<div class="ps__rail-x" style="left: 0px; top: 0px;">
+  <div class="ps__thumb-x" tabindex="0" style="left: 0px; width: 0px;">
+  </div></div><div class="ps__rail-y" style="top: 0px; left: 0px;">
+    <div class="ps__thumb-y" tabindex="0" style="top: 0px; height: 0px;">
+    </div>
+  </div>
+</div>

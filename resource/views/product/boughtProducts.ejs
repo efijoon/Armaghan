@@ -1,0 +1,100 @@
+
+<div class="main-panel ps">
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top ">
+    <div class="container-fluid">
+      <div class="navbar-wrapper">
+        <div class="navbar-minimize">
+          <button id="minimizeSidebar" class="btn btn-just-icon btn-white btn-fab btn-round">
+            <i class="material-icons text_align-center visible-on-sidebar-regular">more_vert</i>
+            <i class="material-icons design_bullet-list-67 visible-on-sidebar-mini">view_list</i>
+          </button>
+        </div>
+        <a class="navbar-brand" href="javascript:;" dideo-checked="true">سبد محصولات</a>
+      </div>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="navbar-toggler-icon icon-bar"></span>
+        <span class="navbar-toggler-icon icon-bar"></span>
+        <span class="navbar-toggler-icon icon-bar"></span>
+      </button>
+    </div>
+  </nav>
+  <!-- End Navbar -->
+  <div class="content">
+    <div class="content">
+      <div class="container-fluid">
+        <div class="col-md-12" style="text-align: right;">
+          <div class="card">
+            <div class="card-header card-header-rose card-header-icon">
+              <div class="card-icon">
+                <i class="fas fa-heart" style="font-size: 25px;"></i>
+              </div>
+              <h4 class="card-title">محصولات خریداری شده</h4>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <% if(user.products.length > 0) { %>
+                  <table class="table table-shopping" id="cart-table">
+                    <thead>
+                      <tr>
+                        <th>عکس محصول</th>
+                        <th>نام محصول</th>
+                        <th class="th-description"></th>
+                        <th class="text-center">تعداد خریداری شده</th>
+                        <th class="text-right"></th>
+                        <th class="text-right">قیمت (تومان)</th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% user.products.forEach((product, index) => { %>
+                        <tr id="<%= product.id %>">
+                          <td>
+                            <div class="img-container">
+                              <img src="/<%= product.id.image %>" alt="...">
+                            </div>
+                          </td>
+                          <td class="td-name">
+                            <a href="/product?pi=<%= product.id.id %>"><%= product.id.name %></a>
+                            <br />
+                          </td>
+                          <td></td>
+                          <td class="td-number text-center"><%= product.count %></td>
+                          <td class="td-number text-center"></td>
+                          <td class="td-number product-price" id="product-price-<%= index %>"><%= numberWithCommas(product.id.price) %></td>
+                        </tr>
+                      <% }) %>
+
+                    </tbody>
+                  </table>
+                  <div id="no-product-in-cart-alert"></div>
+                <% } else { %>       
+                    <h4 style="text-align: center;padding: 10px;border: 2px solid green;border-radius: 20px;margin-top: 50px;">در حال حاضر شما محصول خریداری شده ای ندارید ...</h4>
+                    <br>
+                    <h3 style="text-align: center;">
+                      برای خریداری محصول بر روی <a href="/products">اینجا</a>  کلیک کنید.
+                    </h3>
+                <% } %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<div class="ps__rail-x" style="left: 0px; top: 0px;">
+  <div class="ps__thumb-x" tabindex="0" style="left: 0px; width: 0px;">
+  </div></div><div class="ps__rail-y" style="top: 0px; left: 0px;">
+    <div class="ps__thumb-y" tabindex="0" style="top: 0px; height: 0px;">
+    </div>
+  </div>
+</div>
+
+
+<%
+  function numberWithCommas(number) {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
+%>

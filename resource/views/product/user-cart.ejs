@@ -1,0 +1,145 @@
+
+<div class="main-panel ps">
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top ">
+    <div class="container-fluid">
+      <div class="navbar-wrapper">
+        <div class="navbar-minimize">
+          <button id="minimizeSidebar" class="btn btn-just-icon btn-white btn-fab btn-round">
+            <i class="material-icons text_align-center visible-on-sidebar-regular">more_vert</i>
+            <i class="material-icons design_bullet-list-67 visible-on-sidebar-mini">view_list</i>
+          </button>
+        </div>
+        <a class="navbar-brand" href="javascript:;" dideo-checked="true">سبد محصولات</a>
+      </div>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="navbar-toggler-icon icon-bar"></span>
+        <span class="navbar-toggler-icon icon-bar"></span>
+        <span class="navbar-toggler-icon icon-bar"></span>
+      </button>
+      <!-- <div class="collapse navbar-collapse justify-content-end">
+        <form class="navbar-form">
+          <span class="bmd-form-group"><div class="input-group no-border">
+            <input type="text" value="" class="form-control" placeholder="جست و جو کنید ...">
+            <button type="submit" class="btn btn-white btn-round btn-just-icon">
+              <i class="material-icons">search</i>
+              <div class="ripple-container"></div>
+            </button>
+          </div></span>
+        </form>
+
+      </div> -->
+    </div>
+  </nav>
+  <!-- End Navbar -->
+  <div class="content">
+    <div class="content">
+      <div class="container-fluid">
+        <div class="col-md-12" style="text-align: right;">
+          <div class="card">
+            <div class="card-header card-header-rose card-header-icon">
+              <div class="card-icon">
+                <i class="material-icons">assignment</i>
+              </div>
+              <h4 class="card-title">سبد محصولات شما</h4>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <% if(cart.length > 0) { %>
+                  <table class="table table-shopping" id="cart-table">
+                    <thead>
+                      <tr>
+                        <th>عکس محصول</th>
+                        <th>نام محصول</th>
+                        <th class="th-description">در دسته محصولات</th>
+                        <th class="th-description"></th>
+                        <th class="text-center">تعداد سفارش</th>
+                        <th class="text-center"></th>
+                        <th class="text-right">قیمت (تومان)</th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% cart.forEach((product, index) => { %>
+                        <tr id="<%= product.id %>">
+                          <td>
+                            <div class="img-container">
+                              <img src="/<%= product.image %>" alt="...">
+                            </div>
+                          </td>
+                          <td class="td-name">
+                            <a href="/product?pi=<%= product.id %>"><%= product.name %></a>
+                            <br />
+                          </td>
+                          <td><%= product.category %></td>
+                          
+                          <td></td>
+                          <td class="td-number" style="text-align: center;">
+                            <span id="ordered-product-count-<%= index %>"><%= req.user.cart[index].count %></span>
+                            <br>
+                            <div class="btn-group btn-group-sm">
+                              <button class="btn btn-round btn-info" onclick="decreaseProductCount('<%= product.id %>', '<%= index %>')"> <i class="material-icons">remove</i> </button>
+                              <button class="btn btn-round btn-info" onclick="increaseProductCount('<%= product.id %>', '<%= index %>')"> <i class="material-icons">add</i> </button>
+                            </div>
+                          </td>
+                          <td class="td-number text-center">
+                            
+                          </td>
+                          <td class="td-number product-price" id="product-price-<%= index %>"><%= numberWithCommas(`${product.price * product.count}`) %></td>
+                          <span id="original-product-price-<%= index %>" hidden><%= product.price %></span>
+                          <td class="td-actions">
+                            <button type="button" rel="tooltip" data-placement="left" class="btn btn-link" onclick="removeFromCart('<%= product.id %>')">
+                              <i class="material-icons">close</i>
+                            </button>
+                          </td>
+                        </tr>
+                      <% }) %>
+  
+                      <!-- Total Part ... -->
+                      <tr>
+                        <td colspan="5"></td>
+                        <td class="td-total">مبلغ قابل پرداخت:</td>
+                        <td colspan="1" class="td-price" id="total-price"></td>
+                        <td></td>
+                      </tr>
+                      <tr>
+                        <td colspan="6"></td>
+                        <td colspan="2" class="text-right">
+                          <a href="/completeSendInfo/<%= req.user.id %>" class="btn btn-info btn-round">تکمیل فرآیند خرید <i class="material-icons">keyboard_arrow_left</i></a>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <div id="no-product-in-cart-alert"></div>
+                <% } else { %>       
+                    <h4 style="text-align: center;padding: 10px;border: 2px solid green;border-radius: 20px;margin-top: 50px;">در حال حاضر محصولی در سبد خرید شما نمیباشد...</h4>
+                    <br>
+                    <h3 style="text-align: center;">
+                      برای انتخاب محصول بر روی <a href="/products">اینجا</a>  کلیک کنید.
+                    </h3>
+                <% } %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<div class="ps__rail-x" style="left: 0px; top: 0px;">
+  <div class="ps__thumb-x" tabindex="0" style="left: 0px; width: 0px;">
+  </div></div><div class="ps__rail-y" style="top: 0px; left: 0px;">
+    <div class="ps__thumb-y" tabindex="0" style="top: 0px; height: 0px;">
+    </div>
+  </div>
+</div>
+
+<script src="/admin/js/user-cart-controller.js"></script>
+
+
+<%
+  function numberWithCommas(number) {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
+%>

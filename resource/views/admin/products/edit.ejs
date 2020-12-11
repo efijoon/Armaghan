@@ -1,0 +1,70 @@
+    <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
+        <h2>ویرایش محصول</h2>
+    </div>
+    <form class="form-horizontal" action="/admin/products/<%= product.id %>?_method=put" method="post" enctype="multipart/form-data">
+
+        <%- include(viewPath('layouts/error-messages')) -%>
+
+        <div class="form-group row">
+            <div class="col">
+                <label for="name" class="control-label font-weight-bold">عنوان محصول</label>
+                <input type="text" class="form-control" name="name" id="name" placeholder="عنوان را وارد کنید" value="<%= product.name %>">
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col">
+                <label for="category" class="control-label font-weight-bold font-weight-bold">دسته بندی</label>
+                <select name="category" id="category" class="form-control form-control-chosen" data-placeholder="دسته بندی مورد نظر ...">
+                    <% categories.forEach(cate => { %>
+                        <option value="<%= cate.id %>"<%= product.category == cate.id ? 'selected' : '' %> ><%= cate.name %> - <%= cate.parent ? cate.parent.name : '' %></option>                        
+                    <% }) %>
+                </select>
+            </div>
+        </div>
+        <div class="form-group row">
+          <div class="col">
+              <label for="desc" class="control-label font-weight-bold">متن</label>
+              <textarea rows="5" class="form-control" name="desc" id="desc" placeholder="متن محصول را وارد کنید"><%- product.desc %></textarea>
+          </div>
+        </div>
+        <div class="form-group row">
+            <div class="col">
+                <label for="image" class="control-label font-weight-bold">تصویر محصول</label>
+                <input type="file" class="form-control" name="image" id="image" placeholder="تصویر محصول را وارد کنید" >
+            </div>
+        </div>
+        <div class="form-group row">
+                <div class="col-sm-2">
+                    <label class="control-label">
+                        <input type="radio" name="imagesThumb" value="<%= product.image %>" checked="">
+                        <a href="<%= product.image %>" target="_blank"><img src="/<%= product.image %>" width="100%"></a>
+                    </label>
+                </div>
+        </div>
+        <div class="form-group row">
+            <div class="col">
+                <label for="price" class="control-label font-weight-bold">قیمت</label>
+                <input type="text" class="form-control" name="price" id="price" placeholder="قیمت ها را وارد کنید" value="<%= product.price %>">
+            </div>
+            <div class="col">
+                <label for="count" class="control-label font-weight-bold">تعداد موجود در انبار</label>
+                <input type="text" class="form-control" name="count" id="count" placeholder="تگ ها را وارد کنید" value="<%= product.count %>">
+            </div>
+        </div>
+        <div class="form-group row my-5">
+            <div class="col">
+                <button type="submit" class="btn btn-block btn-primary">ارسال</button>
+            </div>
+        </div>
+    </form>
+
+<link rel="stylesheet" href="/css/component-chosen.min.css">
+<script src="/ckeditor/ckeditor.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.6/chosen.jquery.min.js"></script>
+<script>
+        CKEDITOR.replace('body' , {
+            filebrowserUploadUrl : '/admin/upload-image'
+        })
+   
+       $('.form-control-chosen').chosen({});
+   </script>

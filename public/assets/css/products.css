@@ -1,0 +1,130 @@
+.member {
+    margin-bottom: 20px;
+    overflow: hidden;
+    border-radius: 5px;
+    background: #fff;
+    box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.1);
+  }
+
+ .member .member-img {
+  position: relative;
+  overflow: hidden;
+}
+
+ .member .social {
+  position: absolute;
+  left: 0;
+  bottom: 30px;
+  right: 0;
+  opacity: 0;
+  transition: ease-in-out 0.3s;
+  text-align: center;
+}
+
+ .member .social a {
+  transition: color 0.3s;
+  color: #151515;
+  margin: 0 3px;
+  padding-top: 7px;
+  border-radius: 4px;
+  width: 36px;
+  height: 36px;
+  background: rgba(255, 255, 255, 0.8);
+  display: inline-block;
+  transition: ease-in-out 0.3s;
+  color: #ffc451;
+}
+
+ .member .social a:hover {
+  color: #fff;
+  background: #ffc451;
+}
+
+ .member .social i {
+  font-size: 18px;
+}
+
+ .member .member-info {
+  padding: 25px 15px;
+}
+
+ .member .member-info h4 {
+  font-weight: 700;
+  margin-bottom: 5px;
+  font-size: 18px;
+  color: #151515;
+}
+
+ .member .member-info span {
+  display: block;
+  font-size: 13px;
+  font-weight: 400;
+  color: #aaaaaa;
+}
+
+ .member .member-info p {
+  font-style: italic;
+  font-size: 14px;
+  line-height: 26px;
+  color: #777777;
+}
+
+ .member:hover .social {
+  opacity: 1;
+  bottom: 15px;
+}
+
+.searchbar{
+  margin-bottom: auto;
+  margin-top: auto;
+  height: 60px;
+  background: linear-gradient(90deg, rgba(0,204,171,1) 0%, rgba(0,212,228,1) 100%);
+  border-radius: 30px;
+  padding: 10px;
+  transition: all 1s;
+}
+
+.search_input{
+  color: white;
+  border: 0;
+  outline: 0;
+  background: none;
+  width: 0;
+  caret-color:transparent;
+  line-height: 40px;
+  transition: width 0.4s linear;
+}
+
+.searchbar:hover > .search_input{
+  padding: 0 10px;
+  width: 450px;
+  caret-color:red;
+  transition: all .7s;
+}
+
+.searchbar:hover > .search_icon{
+  background: white;
+  color: #e74c3c;
+}
+
+.search_icon{
+  height: 40px;
+  width: 40px;
+  float: right;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  color:white;
+  text-decoration:none;
+}
+
+.li-unstyled {
+  color: #151515;
+}
+
+@media(max-width: 520px) {
+  .category-container {
+    margin-bottom: 50px;
+  }
+}

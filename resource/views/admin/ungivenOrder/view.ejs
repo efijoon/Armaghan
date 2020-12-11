@@ -1,0 +1,59 @@
+<div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
+        <h2>ویرایش سفارش تکمیل نشده</h2>
+    </div>
+    
+        <%- include(viewPath('layouts/error-messages')) -%>
+    
+        <div class="form-group row">
+            <div class="col">
+                <label for="customer" class="control-label font-weight-bold">سفارش دهنده</label>
+                <input type="text" class="form-control" placeholder="نام سفارش دهنده را وارد کنید" value="<%= old('customer' , ungivenOrder.customer) %>" readonly>
+            </div>
+        </div>
+
+        <div class="form-group row" style="justify-content: center;padding: 30px;border: 5px solid black;border-radius: 20px;">
+            <div class="col-4 product-names-container">
+                <label for="products-name">نام محصولات سفارش</label>
+                <div class="product-names">
+                    <% ungivenOrder.products.forEach(p => { %>
+                        <input type="text" class="form-control mt-3 <%= p.product.id %>" value="<%= p.product.name %>" readonly>
+                    <% }) %>
+                </div>
+            </div>
+            <div class="col-2 product-counts-container">
+                <label for="products-count">تعداد محصولات سفارش</label>
+                <div class="product-counts">
+                    <% ungivenOrder.products.forEach(p => { %>
+                        <input type="text" class="form-control mt-3 product-counts-for-server <%= p.product.id %>" value="<%= p.count %>" readonly>
+                    <% }) %>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="address" class="control-label font-weight-bold font-weight-bold">محل ارسال</label>
+            <input type="text" class="form-control" value="<%=  old('address', ungivenOrder.address) %>" readonly>
+        </div>
+    
+        <div class="form-group">
+            <label for="telephone" class="control-label font-weight-bold font-weight-bold">تلفن تماس پشتیبانی</label>
+            <input type="text" class="form-control" value="<%=  old('telephone', ungivenOrder.telephone) %>" readonly>
+        </div>
+
+        <div class="form-group row">
+            <div class="col">
+                <a href="javascript: history.back()" class="btn btn-info btn-block mt-4" id="submit-btn">برگشت به صفحه سفارشات</a>
+            </div>
+        </div>
+    
+    
+    <link rel="stylesheet" href="/admin/css/component-chosen.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.6/chosen.jquery.min.js"></script>
+    <script>
+        $('.form-control-chosen').chosen({rtl: true}); 
+    </script>
+    <style>
+        .chosen-container {
+            text-align: right;
+        }
+    </style>

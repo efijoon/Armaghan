@@ -1,0 +1,37 @@
+<% if(errors.length > 0) { %>
+    <% errors.forEach(error => { %>
+        <%= error %><br>
+    <% }) %> 
+    <div class="alert alert-danger alert-dismissible">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span>×</span>
+        </button>                            
+    </div>
+<% } %>
+
+<% if(messages.length > 0) { %> 
+    <div class="alert alert-success alert-dismissible">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span>×</span>
+        </button>                            
+        <% messages.forEach(message => { %>
+            <%= message %><br>
+        <% }) %>
+    </div>
+<% } %>
+
+<% if(SAmessages.length) { %>
+        <%  let data = SAmessages[0]; %>
+        <script>
+        Swal.fire({
+            title: '<%= data.title %>',
+            text: '<%= data.message %>',
+            type: '<%= data.type %>',
+            showConfirmButton: <%= data.button !== null ? true : false %>,
+            confirmButtonText: '<%= data.button %>',
+            timer : <%= data.timer || 4 %>,
+            toast : <%= data.toast == null ? 'null' : data.toast %>,
+            position : '<%= data.position == null ? 'null' : data.position %>',
+        })
+        </script>
+<% } %>

@@ -1,0 +1,80 @@
+<div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
+        <h2>ویرایش سفارش تکمیل نشده</h2>
+    </div>
+    <form class="form-horizontal" action="/admin/ungivenOrders/<%= ungivenOrder.id %>?_method=put" method="post">
+    
+        <%- include(viewPath('layouts/error-messages')) -%>
+    
+        <div class="form-group row">
+            <div class="col">
+                <label for="customer" class="control-label font-weight-bold">سفارش دهنده</label>
+                <input type="text" class="form-control" name="customer" id="customer" placeholder="نام سفارش دهنده را وارد کنید" value="<%= old('customer' , ungivenOrder.customer) %>">
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col">
+                <label for="products" class="control-label font-weight-bold font-weight-bold">محصولات سفارش</label>
+                <select name="products" id="products" class="form-control form-control-chosen" style="text-align: right;" multiple>
+                    <% products.forEach(p => { %>
+                        <option value="<%= p.id %>"<%= productIDs.indexOf(p.id) !== -1 ? 'selected' : '' %> ><%= p.name %></option>
+                    <% }) %>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col">
+                <select name="productsCount" id="productsCount" class="form-control" style="text-align: right;" multiple hidden>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group row" style="justify-content: center;padding: 30px;border: 5px solid black;border-radius: 20px;">
+            <div class="col-4 product-names-container">
+                <label for="products-name">نام محصولات سفارش</label>
+                <div class="product-names">
+                    <% ungivenOrder.products.forEach(p => { %>
+                        <input type="text" class="form-control mt-3 <%= p.product.id %>" name="<%= p.product.id %>" value="<%= p.product.name %>" disabled>
+                    <% }) %>
+                </div>
+            </div>
+            <div class="col-2 product-counts-container">
+                <label for="products-count">تعداد محصولات سفارش</label>
+                <div class="product-counts">
+                    <% ungivenOrder.products.forEach(p => { %>
+                        <input type="text" class="form-control mt-3 product-counts-for-server <%= p.product.id %>" name="<%= p.product.id %>" value="<%= p.count %>">
+                    <% }) %>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="address" class="control-label font-weight-bold font-weight-bold">محل ارسال</label>
+            <input id="address" type="text" class="form-control" name="address" value="<%=  old('address', ungivenOrder.address) %>" required>
+        </div>
+    
+        <div class="form-group">
+            <label for="telephone" class="control-label font-weight-bold font-weight-bold">تلفن تماس پشتیبانی</label>
+            <input id="telephone" type="text" class="form-control" name="telephone" value="<%=  old('telephone', ungivenOrder.telephone) %>" required>
+        </div>
+
+        <div class="form-group row">
+            <div class="col">
+                <button type="submit" class="btn btn-info btn-block mt-4" id="submit-btn">ویرایش</button>
+            </div>
+        </div>
+    </form>
+    
+    
+    <link rel="stylesheet" href="/admin/css/component-chosen.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.6/chosen.jquery.min.js"></script>
+    <script src="/admin/js/product-selector-controller.js"></script>
+    <script>
+        $('.form-control-chosen').chosen({rtl: true}); 
+    </script>
+    <style>
+        .chosen-container {
+            text-align: right;
+        }
+    </style>

@@ -1,0 +1,31 @@
+<div class="d-flex justify-content-between align-items-center mb-3 border-bottom-1">
+        <h2>دنبال کنندگان اخبار فروشگاه</h2>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered text-center">
+            <thead>
+            <tr>
+                <th>ایمیل دنبال کننده</th>
+                <th>تنظیمات</th>
+            </tr>
+            </thead>
+            <tbody>
+                <% subscribers.docs.forEach(sub => { %> 
+                    <tr>
+                        <td><%= sub.email %></td>
+                        <td>
+                            <form action="/admin/subscribers/<%= sub.id %>?_method=DELETE" method="post">
+                                <div class="btn-group btn-group-sm">
+                                    <button type="submit" class="btn btn-danger">حذف</button>
+                                </div>
+                            </form>
+                        </td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+
+        <%- include(viewPath('layouts/pagination') ,{ pagination : subscribers }) %>
+    </div>
+    
+    

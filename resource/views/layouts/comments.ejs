@@ -1,0 +1,99 @@
+
+
+    <div class="card my-4">
+        <h5 class="card-header">برای ارتقای سطح این محصول نظر خود را قرار دهید...</h5>
+        <div class="card-body">
+            <%- include(viewPath('layouts/error-messages')) -%>
+                        
+            <form role="form" action="/comment" method="post">
+                <input type="hidden" name="<%= subject.constructor.modelName.toLowerCase() %>" value="<%= subject.id %>">
+                <div class="form-group">
+                    <textarea name="comment" class="form-control" rows="3"></textarea>
+                </div>
+                <button type="submit" class="btn btn-block btn-info">ارسال</button>
+            </form>
+        </div>
+    </div>
+
+    <% if(comments.length > 0) { %>
+        <div class="row" style="display: flex;justify-content: center;">
+            <h2>نظرات قرار گرفته برای این محصول</h2>
+        </div>
+        
+        <hr>
+    <% } %>
+
+<% comments.forEach(comment => { %> 
+
+    <div class="container p-2 my-2" style="border-radius: 10px;background-color: blanchedalmond;box-shadow: 2px 2px 2px black;">
+        <div class="col-12">
+            <div class="media mb-4">
+                <img class="d-flex ml-3 rounded-circle" src="<%= comment.user.image %>" style="width: 50px;height: 50px;" alt="عکس گذارنده نظر">
+                <div class="media-body">
+                    <h5 class="mt-0">
+                        <%= comment.user.name %>
+                        <% if(auth.check) { %> 
+                            <button class="float-left btn-sm btn btn-xs btn-success" data-toggle="modal" data-target="#sendCommentModal" data-parent="<%= comment.id %>">پاسخ</button>
+                        <% } %>
+                    </h5>
+                    <%- comment.comment %>
+                    <small class="text-info"> - <%= persianDate(comment.createdAt).fromNow() %></small>
+        
+                     
+                    <% comment.comments.forEach(comment => { %> 
+                        <div class="media mt-4">
+                            <img class="d-flex ml-3 rounded-circle" src="<%= comment.user.image %>" style="width: 50px;height: 50px;" alt="عکس گذارنده نظر">
+                            <div class="media-body">
+                                <h5 class="mt-0">
+                                    <%= comment.user.name %>
+                                </h5>
+                                <%- comment.comment %>
+                                <small class="text-info"> - <%= persianDate(comment.createdAt).fromNow() %></small>
+                            </div>
+                        </div>    
+                    <% }) %>
+                </div>
+            </div>
+        </div>
+    </div>
+<% }) %>
+<!-- Comment -->
+<% if(auth.check) { %>
+    <div class="modal fade" id="sendCommentModal" tabindex="-1" role="dialog" aria-labelledby="sendCommentModalLabel" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="exampleModalLabel">ارسال پاسخ</h4>
+                    <button type="button" class="close" style="margin-left: -1rem;" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                </div>
+                <div class="modal-body">
+                    <form action="/comment" method="post">
+
+                        <input type="hidden" name="parent" value="">
+                        <input type="hidden" name="<%= subject.constructor.modelName.toLowerCase() %>" value="<%= subject.id %>">
+
+                        <div class="form-group">
+                            <label for="message-text" class="control-label">متن پاسخ:</label>
+                            <textarea class="form-control" id="message-text" name="comment"></textarea>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">ارسال</button>
+                            <button type="button" class="btn btn-default mr-2 ml-0" data-dismiss="modal">انصراف</button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+<% } %>
+
+
+<script>
+    $('#sendCommentModal').on('show.bs.modal' , function(event) {
+        let button = $(event.relatedTarget);
+        let parentId = button.data('parent');
+        let modal = $(this);
+        modal.find("[name='parent']").val(parentId);
+    });
+</script>

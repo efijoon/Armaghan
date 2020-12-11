@@ -1,0 +1,68 @@
+<div class="main-panel ps">
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top ">
+    <div class="container-fluid">
+      <div class="navbar-wrapper">
+        <div class="navbar-minimize">
+          <button id="minimizeSidebar" class="btn btn-just-icon btn-white btn-fab btn-round">
+            <i class="material-icons text_align-center visible-on-sidebar-regular">more_vert</i>
+            <i class="material-icons design_bullet-list-67 visible-on-sidebar-mini">view_list</i>
+          </button>
+        </div>
+        <a class="navbar-brand" href="javascript:;" dideo-checked="true">تکمیل اطلاعات خرید</a>
+      </div>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="navbar-toggler-icon icon-bar"></span>
+        <span class="navbar-toggler-icon icon-bar"></span>
+        <span class="navbar-toggler-icon icon-bar"></span>
+      </button>
+    </div>
+  </nav>
+  <!-- End Navbar -->
+  <div class="content">
+    <div class="content">
+      <div class="container-fluid">
+        <div class="col-md-12">
+          <div class="card ">
+            <div class="card-header card-header-success card-header-icon">
+              <div class="card-icon">
+                <i class="material-icons">contacts</i>
+              </div>
+            </div>
+            <div class="card-body ">
+              <form class="form-horizontal" action="/products/payment" method="POST">
+                <div class="row">
+                  <label class="col-md-3 col-form-label">محل ارسال محصول:</label>
+                  <div class="col-md-9">
+                    <div class="form-group has-default bmd-form-group">
+                      <input type="text" class="form-control" name="address" value="<%= req.user.address %>">
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <label class="col-md-3 col-form-label">شماره تماس جهت پیگیری خرید:</label>
+                  <div class="col-md-9">
+                    <div class="form-group bmd-form-group">
+                      <input type="text" name="telephone" class="form-control" value="<%= req.user.telephone %>">
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="card-footer " style="text-align: left;">
+                <button type="submit" class="btn btn-fill btn-info">خرید محصول</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<div class="ps__rail-x" style="left: 0px; top: 0px;">
+  <div class="ps__thumb-x" tabindex="0" style="left: 0px; width: 0px;">
+  </div></div><div class="ps__rail-y" style="top: 0px; left: 0px;">
+    <div class="ps__thumb-y" tabindex="0" style="top: 0px; height: 0px;">
+    </div>
+  </div>
+</div>

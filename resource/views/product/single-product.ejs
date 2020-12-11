@@ -1,0 +1,200 @@
+<link rel="stylesheet" href="assets/css/products.css">
+  <main id="main">
+
+    <!-- ======= Breadcrumbs ======= -->
+    <section class="breadcrumbs" style="text-align: right;">
+
+        <div class="row m-5">
+          <div class="col-lg-5 col-sm-12">
+            <img src="<%= product.image %>" alt="" style="max-height:100%; max-width:100%;">
+          </div>
+          <div class="col-lg-7 col-sm-12">
+            <div class="desc mt-sm-5 mt-lg-1">
+              <h1 class="mb-4 mt-lg-0  mt-5 "><%= product.name %></h1>
+              <h3 class="mb-4" style="color: #ba8900;font-weight: 600;"><%= numberWithCommas(product.price) %> تومان</h3>
+              <h5 class="mb-4"><%= product.count %> عدد موجود در انبار</h5>
+              <div class="desc-text p-3" style="border: 4px solid #6a6eff;border-radius: 15px;">
+                <p><%- product.desc %></p>
+              </div>
+            </div>
+            <% if(req.isAuthenticated()) { %>
+              <div class="action mt-5">
+                <% if(product.count > 0) { 
+                  if(cartExist) { %> 
+                    <a href="/removeFromCart/<%= product.id %>" class="btn btn-danger">حذف محصول از سبد خرید</a>
+                  <% } else { %>
+                    <a href="/addToCart/<%= product.id %>" class="btn btn-success">اضافه به سبد محصولات</a>
+                  <% } 
+                 } else { %>
+                  <span>موجودی این کالا در انبار به اتمام رسیده است. تا موجود شد مرا <a style="color: black; border: 3px solid red;border-radius: 10px;padding: 5px 15px;" href="/availaleAlert/<%= req.user.id %>">باخبر</a>   کن.</span>
+              <% }
+                  if(favouriteExist) { %> 
+                  <a href="/removeFromFavourite/<%= product.id %>" class="btn btn-dark mr-4 mt-5 mt-lg-0">حذف از علاقه مندی ها</a>
+                <% } else { %>
+                  <a href="/addToFavourite/<%= product.id %>" class="btn btn-warning mr-4 mr-4 mt-5 mt-lg-0">اضافه به علاقه مندی ها</a>
+                <% } %>
+            <% } %>
+              </div>
+            </div>
+        </div>
+
+        <%- include(viewPath('layouts/comments') , { subject : product , comments : product.comments}) -%>
+
+        <div class="row m-5">
+          <div class="col-12">
+            <!-- <h2 class="mb-5">محصولات مشابه</h2> -->
+            <hr>
+          </div>
+        </div>
+
+        <style>
+          .btn-floating {
+            color: white;
+            display: inline-block;
+            border-radius: 60px;
+            box-shadow: 0px 0px 2px #888;
+            padding: 0.8em 1rem;
+            background-color: #007bff;
+          }
+        </style> 
+
+        <!--Related Products -->
+        <% if(sameCategoryProducts.length > 5) { %>
+          <div id="product-slider" class="carousel slide carousel-multi-item" data-ride="carousel">  
+            <div class="controls-top" style="justify-content: center;display: flex;">
+              <a class="btn-floating ml-3" href="#product-slider" data-slide="prev"><i class="fas fa-chevron-left"></i></a>
+              <a class="btn-floating waves-effect waves-light mr-3" href="#product-slider" data-slide="next"><i class="fas fa-chevron-right"></i></a>
+            </div>
+  
+            <ol class="carousel-indicators">
+              <li data-target="#product-slider" data-slide-to="0" class="active"></li>
+              <li data-target="#product-slider" data-slide-to="1"></li>
+            </ol>
+  
+            <!-- Related Products Part -->
+            <div class="carousel-inner" role="listbox">
+  
+              <!--First slide-->
+              <div class="carousel-item active">
+  
+                <div class="row" style="justify-content: center;">
+                  <% for(let i = 0; i < 3; i++) { 
+                    if(sameCategoryProducts[i]) { %>
+                      <div class="col-lg-3 col-sm-12 mx-5 my-5">
+                        <div class="card" style="width: 18rem;">
+                          <img class="card-img-top" src="<%= products[i].image %>" alt="Card image cap">
+                          <div class="card-body">
+                            <h5 class="card-title"><%= sameCategoryProducts[i].name %></h5>
+                            <p class="card-text"><%= sameCategoryProducts[i].desc %></p>
+                            <span class="ml-3"><%= sameCategoryProducts[i].price %> تومان</span>
+                            <a href="#" class="btn btn-primary">مشاهده</a>
+                          </div>
+                        </div>
+                      </div>
+                    <% }
+                  } %>
+                </div>
+  
+              </div>
+              <!--/.First slide-->
+  
+              <!--Second slide-->
+              <div class="carousel-item">
+  
+                <div class="row" style="justify-content: center;">
+                  <% for(let i = 0; i < 3; i++) { %>
+                    <div class="col-lg-3 col-sm-12 mx-5 my-5">
+                      <div class="card" style="width: 18rem;">
+                        <img class="card-img-top" src="images/test.jpg" alt="Card image cap">
+                        <div class="card-body">
+                          <h5 class="card-title">تخته نرد</h5>
+                          <p class="card-text">تخته ای متناسب با افکار و روحیات شما عزیزان جهت استفاده در حال و آشپزخانه</p>
+                          <span class="ml-3">15,000 تومان</span>
+                          <a href="#" class="btn btn-primary">مشاهده</a>
+                        </div>
+                      </div>
+                    </div>
+                  <% } %>
+                </div>
+  
+              </div>
+              <!--/.Second slide-->
+  
+            </div>
+            <!-- Related Products -->
+  
+          </div>
+        <% } else { %>
+          <div id="product-slider" class="carousel slide carousel-multi-item" data-ride="carousel">  
+            <div class="controls-top" style="justify-content: center;display: flex;">
+              <a class="btn-floating ml-3" href="#product-slider" data-slide="prev"><i class="fas fa-chevron-left"></i></a>
+              <a class="btn-floating waves-effect waves-light mr-3" href="#product-slider" data-slide="next"><i class="fas fa-chevron-right"></i></a>
+            </div>
+  
+            <ol class="carousel-indicators">
+              <li data-target="#product-slider" data-slide-to="0" class="active"></li>
+              <li data-target="#product-slider" data-slide-to="1"></li>
+            </ol>
+  
+            <!-- Related Products Part -->
+            <div class="carousel-inner" role="listbox">
+  
+              <!--First slide-->
+              <div class="carousel-item active">
+  
+                <div class="row" style="justify-content: center;">
+                  <% for(let i = 0; i <= 2; i++) { %>
+                    <div class="col-lg-3 col-sm-12 mx-5 my-5">
+                      <div class="card" style="width: 18rem;">
+                        <img class="card-img-top" src="<%= lastSixProducts[i].image %>" alt="Card image cap">
+                        <div class="card-body">
+                          <h5 class="card-title"><%= lastSixProducts[i].name %></h5>
+                          <p class="card-text"><%- lastSixProducts[i].desc %></p>
+                          <span class="ml-3"><%= lastSixProducts[i].price %> تومان</span>
+                          <a href="#" class="btn btn-primary">مشاهده</a>
+                        </div>
+                      </div>
+                    </div>
+                  <% } %>
+                </div>
+  
+              </div>
+              <!--/.First slide-->
+  
+              <!--Second slide-->
+              <div class="carousel-item">
+  
+                <div class="row" style="justify-content: center;">
+                  <% for(let i = 3; i <= 5; i++) { %>
+                    <div class="col-lg-3 col-sm-12 mx-5 my-5">
+                      <div class="card" style="width: 18rem;">
+                        <img class="card-img-top" src="<%= lastSixProducts[i].image %>" alt="Card image cap">
+                        <div class="card-body">
+                          <h5 class="card-title"><%= lastSixProducts[i].name %></h5>
+                          <p class="card-text"><%- lastSixProducts[i].desc %></p>
+                          <span class="ml-3"><%= lastSixProducts[i].price %> تومان</span>
+                          <a href="#" class="btn btn-primary">مشاهده</a>
+                        </div>
+                      </div>
+                    </div>
+                  <% } %>
+                </div>
+  
+              </div>
+              <!--/.Second slide-->
+  
+            </div>
+            <!-- Related Products -->
+  
+          </div>
+        <% } %>
+
+    </section>
+
+  </main>
+
+<%
+  function numberWithCommas(number) {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
+%>

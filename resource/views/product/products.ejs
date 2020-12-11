@@ -1,0 +1,79 @@
+<link rel="stylesheet" href="assets/css/products.css">
+  <main id="main">
+
+    <!-- ======= Breadcrumbs ======= -->
+    <section class="breadcrumbs" style="text-align: right;">
+      <div class="container">
+        <div class="d-flex justify-content-center">
+          <form action="/searchProduct" method="post">
+            <div class="searchbar">
+                <input class="search_input" type="text" id="searchedText" name="searchedText" placeholder="دنبال چه محصولی هستید...">
+                <button style="color: red;" type="submit" class="search_icon"><i class="fas fa-search"></i></button>
+            </div>
+          </form>
+        </div>
+        <% if(req.url.includes('searchProduct')) { %>
+          <span style="font-size: 15px;padding: 10px;border: 3px solid gold;border-radius: 22px;">عبارت جست و جو شده:</span>
+          <span class="mr-3" style="font-size: 25px;"><%= searchedText %></span>
+        <% } %>
+      </div>
+      <div class="row m-5">
+        <div class="col-lg-2 mb-md-5 category-container">
+          <div class="card" style="box-shadow: 0 0 10px #bbb;">
+            <h5 class="card-header" style="background-color: #fff;">دسته بندی</h5>
+            <div class="card-body">
+              <div class="row">
+                <div class="col">
+                    <ul class="list-unstyled pr-0">
+                        <% categories.forEach(category => { %> 
+                            <li>
+                                <a class="li-unstyled" href="/products?category=<%= category.id %>"><%= category.name %></a>
+                                <% if(category.childs) { %> 
+                                    <ul>
+                                        <% category.childs.forEach(cate => { %>
+                                            <li>
+                                                <a class="li-unstyled" href="/products?category=<%= cate.id %>"><%= cate.name %></a>    
+                                            </li>                                    
+                                        <% }) %>
+                                    </ul>
+                                <% } %> 
+                            </li>    
+                        <% }) %>
+                    </ul>
+                </div>
+              </div>
+            </div>
+        </div>
+        </div>
+
+          <div class="col-lg-10 col-md-8 col-sm-12 col-xs-12 mt-xs-5">
+            <div class="row" style="text-align: right;">
+              <% if(products.docs.length > 0) {
+                products.docs.forEach(product => { %> 
+                <div class="col-lg-3 col-md-6 d-flex align-items-stretch">
+                  <div class="member" data-aos="fade-up" data-aos-delay="300">
+                    <div class="member-img">
+                      <img src="<%= product.image %>" class="img-fluid" alt="">
+                      <div class="social">
+                        <a href="/product?pi=<%= product.id %>" class="btn" style="width: 135px;height: 37px;background-color: #1e7e34;color: #fff;">مشاهده محصول</a>
+                      </div>
+                    </div>
+                    <div class="member-info" style="padding: 25px 15px;">
+                      <h4><%= product.name %></h4>
+                      <span><%- product.desc %></span>
+                    </div>
+                  </div>
+                </div>
+              <% }) 
+              } else { %>
+                <div class="col" style="display: flex;justify-content: center;align-items: center;position: absolute;">
+                  <h3>محصولی برای نمایش وجود ندارد.</h3>
+                </div>
+              <% } %>
+            </div>
+          </div>
+
+      </div>
+    </section>
+
+  </main>

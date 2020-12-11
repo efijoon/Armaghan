@@ -1,0 +1,48 @@
+<div class="d-flex justify-content-between align-items-center mb-3 border-bottom-1">
+        <h2>سفارشات تحویل داده نشده</h2>
+        <div class="btn-group">
+            <a href="/admin/ungivenOrders/create" class="btn btn-sm btn-primary">ایجاد سفارش جدید</a>
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered text-center">
+            <thead>
+            <tr>
+                <th>سفارش شماره</th>
+                <th>سفارش دهنده</th>
+                <th>کالاهای سفارش</th>
+                <th>وضعیت</th>
+                <th>عملیات</th>
+                <th>تنظیمات</th>
+            </tr>
+            </thead>
+            <tbody>
+                <% ungivenOrders.docs.forEach((ungivenOrder, index) => { %> 
+                    <tr>
+                        <td><a href="#"><%= ungivenOrder.index %></a></td>
+                        <td><%= ungivenOrder.customer %></td>
+                        <td>
+                            <% ungivenOrder.products.forEach(p => { %>
+                                <span class="mr-3"><%= p.product.name %></span>
+                            <% }) %>
+                        </td>
+                        <td><%= ungivenOrder.sent ? 'فرستاده شد' : 'ارسال نشده' %></td>
+                        <td><a href="/admin/completeOrder/<%= ungivenOrder.id %>" class="btn btn-success">تکمیل سفارش</a></td>
+                        <td>
+                            <form action="/admin/ungivenOrders/<%= ungivenOrder.id %>?_method=DELETE" method="post">
+                                <div class="btn-group btn-group-sm">
+                                    <a href="/admin/ungivenOrders/<%= ungivenOrder.id %>/view"  class="btn btn-dark">مشاهده</a>
+                                    <a href="/admin/ungivenOrders/<%= ungivenOrder.id %>/edit"  class="btn btn-primary">ویرایش</a>
+                                    <button type="submit" class="btn btn-danger">حذف</button>
+                                </div>
+                            </form>
+                        </td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+
+        <%- include(viewPath('layouts/pagination') ,{ pagination : ungivenOrders}) %>
+    </div>
+    
+    
