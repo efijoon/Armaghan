@@ -17,23 +17,27 @@
                 <p><%- product.desc %></p>
               </div>
             </div>
-            <% if(req.isAuthenticated()) { %>
               <div class="action mt-5">
                 <% if(product.count > 0) { 
-                  if(cartExist) { %> 
+                  if(productInCart) { %> 
                     <a href="/removeFromCart/<%= product.id %>" class="btn btn-danger">حذف محصول از سبد خرید</a>
                   <% } else { %>
                     <a href="/addToCart/<%= product.id %>" class="btn btn-success">اضافه به سبد محصولات</a>
                   <% } 
-                 } else { %>
-                  <span>موجودی این کالا در انبار به اتمام رسیده است. تا موجود شد مرا <a style="color: black; border: 3px solid red;border-radius: 10px;padding: 5px 15px;" href="/availaleAlert/<%= req.user.id %>">باخبر</a>   کن.</span>
-              <% }
-                  if(favouriteExist) { %> 
-                  <a href="/removeFromFavourite/<%= product.id %>" class="btn btn-dark mr-4 mt-5 mt-lg-0">حذف از علاقه مندی ها</a>
-                <% } else { %>
-                  <a href="/addToFavourite/<%= product.id %>" class="btn btn-warning mr-4 mr-4 mt-5 mt-lg-0">اضافه به علاقه مندی ها</a>
-                <% } %>
-            <% } %>
+                 } else { 
+                  if(req.isAuthenticated()) { %>
+                    <span>موجودی این کالا در انبار به اتمام رسیده است. تا موجود شد مرا <a style="color: black; border: 3px solid red;border-radius: 10px;padding: 5px 15px;" href="/availaleAlert/<%= req.user.id %>">باخبر</a>   کن.</span>
+                  <% } else { %>
+                    <span>موجودی این کالا در انبار به اتمام رسیده است.</span>
+                  <% }
+                  if(req.isAuthenticated()) { 
+                      if(favouriteExist) { %> 
+                      <a href="/removeFromFavourite/<%= product.id %>" class="btn btn-dark mr-4 mt-5 mt-lg-0">حذف از علاقه مندی ها</a>
+                    <% } else { %>
+                      <a href="/addToFavourite/<%= product.id %>" class="btn btn-warning mr-4 mr-4 mt-5 mt-lg-0">اضافه به علاقه مندی ها</a>
+                    <% } %>
+                  <% } 
+                } %>
               </div>
             </div>
         </div>

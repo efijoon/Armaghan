@@ -53,9 +53,10 @@
       </nav><!-- .nav-menu -->
 
       <% if(! req.isAuthenticated()) { %> 
-        <a href="/auth/login" class="btn btn-outline-warning scrollto"  style="transform: translateX(-30px);color: white;">ورود به حساب</a>
-        <a href="/auth/register" class="btn btn-outline-success scrollto" style="color: white;">ساخت حساب جدید</a>
-      <% } else { %>
+            <a href="/auth/login" class="btn btn-outline-warning scrollto"  style="color: white;">ورود به حساب</a>
+            <a href="/auth/register" class="btn btn-outline-success scrollto" style="color: white;">ساخت حساب جدید</a>
+            <a href="/purchaseCart" class="btn btn-outline-primary scrollto" style="color: white;">سبد محصولات</a>
+            <% } else { %>
           <a href="/dashboard/user-profile" class="btn btn-outline-success scrollto"  style="transform: translateX(-30px);color: white;">پنل کاربری</a>
           <% if(req.user.admin) { %>
             <a href="/dashboard/cart" class="btn btn-outline-primary scrollto" style="margin-right: 55px;color: white;">سبد محصولات</a>

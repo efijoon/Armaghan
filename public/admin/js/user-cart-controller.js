@@ -1,5 +1,5 @@
 let totalPrice = 0;
-let tPrice = document.getElementById('total-price');;
+let tPrice = document.getElementById('total-price');
 let prices;
 
 function calculateTotalPrice() {
