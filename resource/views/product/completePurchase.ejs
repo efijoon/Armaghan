@@ -5,43 +5,39 @@
     }
 </style>
 <div class="container mb-5 p-5" style="margin-top: 125px;border-radius: 12px; box-shadow: 0px 0px 20px #2323;text-align: right;">
-    <form>
+    <form action="/products/payment" method="POST">
         <div class="form-row">
             <div class="form-group col-md-6">
                 <label for="username">نام و نام خوانوادگی</label>
-                <input type="username" name="username" class="form-control" id="username" placeholder="نام و نام خوانوادگی">
+                <input value="<%= old('username') %>" type="username" name="username" class="form-control" id="username" placeholder="نام و نام خوانوادگی">
             </div>
             <div class="form-group col-md-6">
               <label for="inputEmail4">ایمیل</label>
-              <input type="email"  name="email" class="form-control" id="inputEmail4" placeholder="ایمیل">
+              <input value="<%= old('email') %>" type="email"  name="email" class="form-control" id="inputEmail4" placeholder="ایمیل">
             </div>
         </div>
         <div class="form-group">
           <label for="inputAddress">محل ارسال محصول(ها)</label>
-          <input type="text" name="address" class="form-control" id="inputAddress" placeholder="خیابان کاوه، خیابان نگارستان ...">
+          <input value="<%= old('address') %>" type="text" name="address" class="form-control" id="inputAddress" placeholder="خیابان کاوه، خیابان نگارستان ...">
         </div>
         <div class="form-group">
           <label for="telephone">شماره تلفن تماس</label>
-          <input type="text" name="telephone" class="form-control" id="telephone" placeholder="091399999999">
+          <input value="<%= old('telephone') %>" type="text" name="telephone" class="form-control" id="telephone" placeholder="091399999999">
         </div>
         <div class="form-row">
           <div class="form-group col-md-6">
             <label for="city">شهر ارسال</label>
-            <select class="form-control selectpicker" data-live-search="true">
-                <option data-tokens="ketchup mustard">اصفهان</option>
-                <option data-tokens="mustard">تهران</option>
-                <option data-tokens="frosting">مشهد</option>
+            <select value="<%= old('city') %>" name="city" class="form-control selectpicker" data-live-search="true">
+                <option value="esfahan" data-tokens="esfahan">اصفهان</option>
+                <option value="tehran" data-tokens="tehran">تهران</option>
+                <option value="mashad" data-tokens="mashad">مشهد</option>
               </select>
           </div>
           <div class="form-group col-md-6">
             <label for="inputZip">کدپستی</label>
-            <input name="postalCode" type="text" class="form-control" id="کدپستی">
+            <input value="<%= old('postalCode') %>" name="postalCode" name="postalCode" type="text" class="form-control" id="کدپستی">
           </div>
         </div>
-        <div class="form-group">
-            
-        </div>
-        
         <button type="submit" class="btn btn-primary">خرید محصول(ها)</button>
       </form>
 </div>

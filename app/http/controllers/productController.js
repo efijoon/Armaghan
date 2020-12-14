@@ -7,8 +7,7 @@ const Payment = require("../../models/payment");
 const UngivenOrder = require("../../models/ungivenOrder");
 const Comment = require("../../models/comment");
 const fetch = require("node-fetch");
-const Bluebird = require("bluebird");
-fetch.Promise = Bluebird;
+const product = require("../../models/product");
 
 class ProductController extends controller {
   constructor() {
@@ -361,6 +360,7 @@ class ProductController extends controller {
   }
 
   async completePurchase(req, res) {
+    if(this.cart.length === 0) return res.redirect('/');
     res.render("product/completePurchase");
   }
 
@@ -370,9 +370,9 @@ class ProductController extends controller {
 
   async payment(req, res, next) {
     try {
-      let { address, telephone } = req.body;
+      let { address, telephone, city, username, email, postalCode } = req.body;
 
-      if (address == "" || telephone == "") {
+      if (address == "" || telephone == "" || email == "" || postalCode == "" || city == "") {
         return this.alertAndBack(req, res, {
           title: "لطفا مقادیر خواسته شده را وارد کنید.",
           type: "error",
@@ -390,23 +390,30 @@ class ProductController extends controller {
         });
       }
 
-      let user = await User.findById(req.user.id);
-      if (user.cart.length <= 0) {
-        return this.alertAndBack(req, res, {
-          title: "شما محصولی در سبد خرید خود ندارید.",
-          type: "error",
-          position: "center",
-          toast: true,
-        });
-      }
-
       let Amount = 0;
       let productIds = [];
 
-      user.cart.forEach(async (product) => {
-        Amount += product.price;
-        productIds.push(product.id);
-      });
+      if(req.isAuthenticated()) {
+        let user = await User.findById(req.user.id);
+        if (user.cart.length <= 0) {
+          return this.alertAndBack(req, res, {
+            title: "شما محصولی در سبد خرید خود ندارید.",
+            type: "error",
+            position: "center",
+            toast: true,
+          });
+        }
+
+        user.cart.forEach(async (product) => {
+          Amount += (product.price * product.count);
+          productIds.push(product.id);
+        });
+      } else {
+        this.cart.forEach(async (product) => {
+          Amount += (product.price * product.count);
+          productIds.push(product.id);
+        });
+      }
 
       let notavailable = false;
       const products = await Product.find({ _id: productIds });
@@ -429,9 +436,9 @@ class ProductController extends controller {
       let params = {
         MerchantID: "d53a145f-b2c5-4dc5-afc0-cced9493aecf",
         Amount,
-        CallbackURL: "http://localhost:3000/products/payment/checker",
+        CallbackURL: process.env.ZARIN_CALLBACKURL,
         Description: `بابت خرید محصول از فروشگاه اینترنتی ارمغان`,
-        Email: req.user.email,
+        Email: req.user ? req.user.email : email,
       };
 
       let options = this.getUrlOption(
@@ -441,19 +448,41 @@ class ProductController extends controller {
 
       request(options)
         .then(async (data) => {
-          let payment = new Payment({
-            user: req.user.id,
-            resnumber: data.Authority,
-            price: Amount,
-            address,
-            telephone,
-          });
+          
+          if(req.isAuthenticated()) {
+            let payment = new Payment({
+              user: req.user.id,
+              username: `${req.user.name} ${req.user.family}`,
+              resnumber: data.Authority,
+              price: Amount,
+              address,
+              telephone,
+              postalCode,
+              city
+            });
+  
+            user.cart.forEach((p) => {
+              payment.products.push({ id: p.id, count: p.count });
+            });
 
-          user.cart.forEach((p) => {
-            payment.products.push({ id: p.id, count: p.count });
-          });
+            await payment.save();
+          } else {
+            let payment = new Payment({
+              username: username,
+              resnumber: data.Authority,
+              price: Amount,
+              address,
+              telephone,
+              postalCode,
+              city
+            });
+            
+            this.cart.forEach((p) => {
+              payment.products.push({ id: p.id, count: p.count });
+            });
 
-          await payment.save();
+            await payment.save();
+          }
 
           res.redirect(
             `https://www.zarinpal.com/pg/StartPay/${data.Authority}`
@@ -465,9 +494,8 @@ class ProductController extends controller {
     }
   }
 
-  async checker(req, res, next) {
+  async checker(req, res, next) { 
     try {
-      // let payment = await Payment.findOne({ resnumber : 'A00000000000000000000000000224356122' })
 
       if (req.query.Status && req.query.Status !== "OK") {
         return this.alertAndBack(req, res, {
@@ -500,49 +528,58 @@ class ProductController extends controller {
       request(options)
         .then(async (data) => {
           if (data.Status == 100) {
+
+            // thep = the product
+            let boughtProduct;
+            let userBoughtProductsID = [];
+
             payment.set({ payment: true });
 
-            let user = await User.findById(req.user.id);
+            if(req.isAuthenticated()) {
+              let user = await User.findById(req.user.id);
 
-            user.points += 10;
-            user.cart = [];
+              user.points += 10;
+              user.cart = [];
+              
+              user.products.forEach((product) => {
+                userBoughtProductsID.push(`${product.id}`);
+              });
+            } else {
+              this.cart = [];
+            }
 
             let ungivenOrders = await UngivenOrder.find();
             const newUngivenOrder = await UngivenOrder({
               index: ungivenOrders.length + 1,
               address: payment.address,
               telephone: payment.telephone,
-              customer: `${user.name} ${user.family}`,
-            });
-
-            // thep = the product
-            let thep;
-            let userBoughtProductsID = [];
-
-            user.products.forEach((product) => {
-              userBoughtProductsID.push(`${product.id}`);
+              customer: payment.username,
+              city: payment.city,
+              postalCode: payment.postalCode
             });
 
             payment.products.forEach(async (p) => {
               if (userBoughtProductsID.indexOf(p.id) == -1) {
                 // User hadn't baught this product yet
-                user.products.push({ id: p.id, count: p.count });
+                if(req.isAuthenticated()) user.products.push({ id: p.id, count: p.count }); 
               } else {
                 // User had baught this product in past
-                user.products.forEach((boughtProduct) => {
-                  if (boughtProduct.id == p.id) boughtProduct.count += p.count;
-                });
+                if(req.isAuthenticated())  {
+                  user.products.forEach((userProduct) => {
+                    if (userProduct.id == p.id) userProduct.count += p.count;
+                  });
+                }
               }
               newUngivenOrder.products.push({ product: p.id, count: p.count });
 
-              thep = await Product.findById(p.id);
-              thep.count -= p.count;
-              await thep.save();
+              boughtProduct = await Product.findById(p.id);
+              boughtProduct.count -= p.count;
+              await boughtProduct.save();
             });
 
             await newUngivenOrder.save();
             await payment.save();
-            await user.save();
+            req.user && await user.save();
 
             this.alert(req, {
               title: "با تشکر",
@@ -551,7 +588,12 @@ class ProductController extends controller {
               button: "بسیار خوب",
             });
 
-            res.redirect("/dashboard/dashboard");
+            if(req.isAuthenticated()) {
+              res.redirect("/dashboard/dashboard");
+            } else {
+              res.redirect("/");
+            }
+
           } else {
             this.alertAndBack(req, res, {
               title: "پرداخت شما با موفقیت انجام نشد",

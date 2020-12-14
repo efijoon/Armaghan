@@ -65,7 +65,7 @@
                           <td class="td-number text-center">
                             
                           </td>
-                          <td class="td-number product-price" id="product-price-<%= index %>"><%= numberWithCommas(`${product.price * product.count}`) %></td>
+                          <td class="td-number product-price" id="product-price-<%= index %>"><%= numberWithCommas(product.price) %></td>
                           <td class="td-actions">
                             <button type="button" rel="tooltip" data-placement="left" class="btn btn-link" onclick="removeFromFavourite('<%= product.id %>')">
                               <i class="material-icons">close</i>

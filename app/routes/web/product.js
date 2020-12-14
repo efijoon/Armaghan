@@ -26,8 +26,8 @@ router.post('/searchProduct', redirectIfNotAuthenticated.handle, productControll
 
 router.get('/buyInformation', productController.buyInformation);
 router.get('/completeSendInfo/:userID', redirectIfNotAuthenticated.handle, productController.completeSendInfo);
-router.get('/products/payment/checker', redirectIfNotAuthenticated.handle, productController.checker);
-router.post('/products/payment', redirectIfNotAuthenticated.handle, productController.payment);
+router.get('/products/payment/checker', productController.checker);
+router.post('/products/payment', productController.payment);
 
 router.post('/comment', redirectIfNotAuthenticated.handle, productController.comment);
 
