@@ -6,9 +6,6 @@ const request = require("request-promise");
 const Payment = require("../../models/payment");
 const UngivenOrder = require("../../models/ungivenOrder");
 const Comment = require("../../models/comment");
-const fetch = require("node-fetch");
-const product = require("../../models/product");
-
 class ProductController extends controller {
   constructor() {
     super();
@@ -17,23 +14,22 @@ class ProductController extends controller {
 
   async index(req, res) {
     let page = req.query.page || 1;
-
-    let categories = await Category.find({ parent: null })
-      .populate("childs")
-      .exec();
+    
+    let products = [{ docs: [] }];
+    const categoriesIds = [];
 
     if (req.query.category) {
-      const products = await Product.paginate(
-        { category: req.query.category },
-        { page, sort: { createdAt: "-1" }, limit: 15 }
-      );
-      return res.render("product/products", { products, categories });
-    }
+      const category = await Category.findById(req.query.category);
+      if(! category.parent) {
+        const categories = await Category.find({ parent: category._id });
 
-    const products = await Product.paginate(
-      {},
-      { page, sort: { createdAt: "-1" }, limit: 15 }
-    );
+        categories.forEach(cat => { categoriesIds.push(cat.id) });
+      } else categoriesIds.push(req.query.category);
+      products = await Product.paginate({ category: categoriesIds }, { page, sort: { createdAt: "-1" }, limit: 15 });
+
+    } else products = await Product.paginate({}, { page, sort: { createdAt: "-1" }, limit: 15 });
+    
+    let categories = await Category.find({ parent: null }).populate("childs").exec();
     res.render("product/products", { products, categories });
   }
 

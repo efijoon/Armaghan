@@ -2,7 +2,6 @@ const path = require("path");
 const autoBind = require("auto-bind");
 const momentJalaali = require("moment-jalaali");
 momentJalaali.loadPersian({ usePersianDigits: true });
-
 module.exports = class Helpers {
   constructor(req, res) {
     autoBind(this);

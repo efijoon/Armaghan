@@ -20,7 +20,7 @@ class DashboardController extends controller {
 
         let { name, family, email, address, telephone } = req.body;
 
-        if(name == '' || family == '' || email == '' || password == '' || address == ''  ) {
+        if(! name || ! family || ! email || ! address || ! telephone) {
             return this.alertAndBack(req, res, {
               title: 'لطفا تمامی مقدارهای خواسته شده را وارد نمایید.',
               type: 'error',

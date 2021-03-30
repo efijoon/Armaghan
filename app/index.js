@@ -47,8 +47,6 @@ module.exports = class Application {
      */
     setConfig() {
         require('app/passport/passport-local');
-        require('app/passport/passport-google');
-        require('app/passport/passport-jwt');
  
         app.enable('trust proxy');
         app.use(helmet());
