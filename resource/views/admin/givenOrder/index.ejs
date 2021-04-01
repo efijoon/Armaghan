@@ -1,9 +1,9 @@
 <div class="d-flex justify-content-between align-items-center mb-3 border-bottom-1">
-        <h2>سفارشات تحویل داده شده</h2>
-    </div>
-    <div class="table-responsive">
-        <table class="table table-striped table-bordered text-center">
-            <thead>
+    <h2>سفارشات تحویل داده شده</h2>
+</div>
+<div class="table-responsive">
+    <table class="table table-striped table-bordered text-center">
+        <thead>
             <tr>
                 <th>سفارش شماره</th>
                 <th>سفارش دهنده</th>
@@ -12,34 +12,68 @@
                 <th>عملیات</th>
                 <th>تنظیمات</th>
             </tr>
-            </thead>
-            <tbody>
-                <% givenOrders.docs.forEach((givenOrder, index) => { %> 
-                    <tr>
-                        <td><a href="#"><%= givenOrder.index %></a></td>
-                        <td><%= givenOrder.customer %></td>
-                        <td>
-                            <% givenOrder.products.forEach(p => { %>
-                                <span class="mr-3"><%= p.product.name %></span>
-                            <% }) %>
-                        </td>
-                        <td><%= givenOrder.sent ? 'فرستاده شد' : 'ارسال نشده' %></td>
-                        <td><a href="/admin/uncompleteOrder/<%= givenOrder.id %>" class="btn btn-dark">سفارش تکمیل نشده</a></td>
-                        <td>
-                            <form action="/admin/givenOrders/<%= givenOrder.id %>?_method=DELETE" method="post">
-                                <div class="btn-group btn-group-sm">
-                                    <a href="/admin/givenOrders/<%= givenOrder.id %>/view"  class="btn btn-success">مشاهده</a>
-                                    <a href="/admin/givenOrders/<%= givenOrder.id %>/edit"  class="btn btn-primary">ویرایش</a>
-                                    <button type="submit" class="btn btn-danger">حذف</button>
-                                </div>
-                            </form>
-                        </td>
-                    </tr>
+        </thead>
+        <tbody>
+            <% givenOrders.docs.forEach((givenOrder, index)=> { %>
+                <tr>
+                    <td><a href="#">
+                            <%= givenOrder.index %>
+                        </a></td>
+                    <td>
+                        <%= givenOrder.customer %>
+                    </td>
+                    <td>
+                        <% givenOrder.products.forEach(p => { %>
+                            <span class="mr-3">
+                                <%= p.product.name %>
+                            </span>
+                        <% }) %>
+                    </td>
+                    <td>
+                        <%= givenOrder.sent ? 'فرستاده شد' : 'ارسال نشده' %>
+                    </td>
+                    <td><a onclick="askForComplete('/admin/uncompleteOrder/<%= givenOrder.id %>', $(this))" class="btn btn-dark text-white">سفارش تکمیل نشده</a>
+                    </td>
+                    <td>
+                        <form id="del-form-<%= index %>" action="/admin/givenOrders/<%= givenOrder.id %>?_method=DELETE" method="post">
+                            <div class="btn-group btn-group-sm">
+                                <a href="/admin/givenOrders/<%= givenOrder.id %>/view"
+                                    class="btn btn-success">مشاهده</a>
+                                <a href="/admin/givenOrders/<%= givenOrder.id %>/edit"
+                                    class="btn btn-primary">ویرایش</a>
+                                <a onclick="askForDelete('<%= index %>')" class="btn btn-danger text-white">حذف</a>
+                            </div>
+                        </form>
+                    </td>
+                </tr>
                 <% }) %>
-            </tbody>
-        </table>
+        </tbody>
+    </table>
 
-        <%- include(viewPath('layouts/pagination') ,{ pagination : givenOrders}) %>
-    </div>
-    
-    
+    <%- include(viewPath('layouts/pagination') ,{ pagination : givenOrders}) %>
+</div>
+<script src="/assets/js/ask.js"></script>
+<script>
+    function askForComplete(url, elem) {
+        Swal.fire({
+            title: 'سوال',
+            text: "آیا از تکمیل نشدن این سفارش اطمینان دارید ؟",
+            type: 'question',
+            showCancelButton: true,
+            confirmButtonColor: 'green',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'بله',
+            cancelButtonText: 'خیر'
+        }).then((result) => {
+            if (result.value) {
+                $.ajax({
+                    method: 'get',
+                    url,
+                    success: () => {
+                        elem.parent().parent().remove();
+                    }
+                });
+            }
+        })
+    }
+</script>

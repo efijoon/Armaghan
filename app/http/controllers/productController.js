@@ -389,8 +389,9 @@ class ProductController extends controller {
       let Amount = 0;
       let productIds = [];
 
+      let user;
       if(req.isAuthenticated()) {
-        let user = await User.findById(req.user.id);
+        user = await User.findById(req.user.id);
         if (user.cart.length <= 0) {
           return this.alertAndBack(req, res, {
             title: "شما محصولی در سبد خرید خود ندارید.",
@@ -456,6 +457,10 @@ class ProductController extends controller {
               postalCode,
               city
             });
+            console.log(address,
+              telephone,
+              postalCode,
+              city)
   
             user.cart.forEach((p) => {
               payment.products.push({ id: p.id, count: p.count });

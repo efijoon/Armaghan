@@ -12,6 +12,7 @@ const productSchema = Schema({
     commentCount : { type : Number, default : 0 },
     awailable : { type : Boolean, default: true },
     image: { type : String, requried: true },
+    images: { type : Array, default: [] },
     count : { type : Number , default  : 0 }
 } , { timestamps : true , toJSON : { virtuals : true } });
 

@@ -167,21 +167,22 @@
 
         <div class="row portfolio-container" data-aos="fade-up" data-aos-delay="200">
 
-          <% for(let i = 1;i< 7;i++) { %>
-            <div class="col-lg-4 col-md-6 portfolio-item <%= products[i].category.name %>">
-              <div class="portfolio-wrap">
-                <img src="<%= products[i].image %>" class="img-fluid" alt="">
-                <div class="portfolio-info">
-                  <h4><%= products[i].name %></h4>
-                  <p><%= products[i].category.name %></p>
-                  <div class="portfolio-links">
-                    <!-- <a href="/product?pi=<%= products[i].image %>" data-gall="portfolioGallery" class="venobox" title="Web 3"><i class="bx bx-plus"></i></a> -->
-                    <a href="/product?pi=<%= products[i].id %>" title="مشاهده اطلاعات محصول"><i class="bx bx-link"></i></a>
+        <% if(products.length > 0) {
+            products.forEach((product) => { %>
+              <div class="col-lg-4 col-md-6 portfolio-item <%= product.category.name %>">
+                <div class="portfolio-wrap">
+                  <img src="<%= product.image %>" class="img-fluid" alt="">
+                  <div class="portfolio-info">
+                    <h4><%= product.name %></h4>
+                    <p><%= product.category.name %></p>
+                    <div class="portfolio-links">
+                      <!-- <a href="/product?pi=<%= product.image %>" data-gall="portfolioGallery" class="venobox" title="Web 3"><i class="bx bx-plus"></i></a> -->
+                      <a href="/product?pi=<%= product.id %>" title="مشاهده اطلاعات محصول"><i class="bx bx-link"></i></a>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          <% } %>
+          <% }) } %>
 
         </div>
 

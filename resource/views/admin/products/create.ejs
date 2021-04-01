@@ -27,20 +27,24 @@
           <textarea rows="10" class="form-control" name="desc" id="desc" placeholder="متن مقاله را وارد کنید"><%= old('desc', 'یکی از محصولات خوب و با کیفیت فروشگاه') %></textarea>
       </div>
     </div>
-    <div class="form-group row">
+    <div class="form-group row my-5">
         <div class="col">
-            <label for="image" class="control-label font-weight-bold">تصویر محصول</label>
-            <input type="file" class="form-control" name="image" id="image" placeholder="تصویر مقاله را وارد کنید" >
+            <label for="image" class="control-label font-weight-bold">تصویر اصلی محصول</label>
+            <input type="file" name="image" id="image">
         </div>
         <div class="col">
-            <label for="price" class="control-label font-weight-bold">قیمت (تومان)</label>
-            <input type="text" class="form-control" name="price" id="price" placeholder="قیمت ها را وارد کنید" value="<%= old('price') %>">
+            <label for="images" class="control-label font-weight-bold">تصاویر اختیاری محصول</label>
+            <input type="file" name="images" id="images" multiple accept="image/*">
         </div>
     </div>
     <div class="form-group row mt-4">
-        <div class="col">
+        <div class="col-6">
             <label for="count" class="control-label font-weight-bold">تعداد موجود محصول در انبار</label>
             <input type="text" class="form-control" name="count" id="count" placeholder="تعداد را وارد کنید" value="<%= old('count') %>">
+        </div>
+        <div class="col-6">
+            <label for="price" class="control-label font-weight-bold">قیمت (تومان)</label>
+            <input type="text" class="form-control" name="price" id="price" placeholder="قیمت ها را وارد کنید" value="<%= old('price') %>">
         </div>
     </div>
     <div class="form-group row">

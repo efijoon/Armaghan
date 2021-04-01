@@ -1,5 +1,4 @@
 
-
     <div class="card my-4">
         <h5 class="card-header">برای ارتقای سطح این محصول نظر خود را قرار دهید...</h5>
         <div class="card-body">
@@ -21,12 +20,11 @@
         </div>
     <% } %>
 
-<% comments.forEach(comment => { %> 
-
-    <div class="container p-2 my-2" style="border-radius: 10px;background-color: blanchedalmond;box-shadow: 0px 0px 21px grey;">
-        <div class="col-12">
-            <div class="media mb-4">
-                <img class="d-flex ml-3 rounded-circle" src="<%= comment.user.image %>" style="width: 50px;height: 50px;" alt="عکس گذارنده نظر">
+<div class="container p-2 my-2" style="border-radius: 10px;background-color: blanchedalmond;box-shadow: 0px 0px 21px grey;">
+    <% comments.forEach((comment, index) => { %> 
+        <div class="col-12 <%= index > 0 && 'mt-4' %>">
+            <div class="media">
+                <img class="d-flex ml-3 rounded-circle" src="<%= comment.user.image || 'assets/img/default-avatar.png' %>" style="width: 50px;height: 50px;" alt="عکس گذارنده نظر">
                 <div class="media-body">
                     <h5 class="mt-0">
                         <%= comment.user.name %>
@@ -40,7 +38,7 @@
                      
                     <% comment.comments.forEach(comment => { %> 
                         <div class="media mt-4">
-                            <img class="d-flex ml-3 rounded-circle" src="<%= comment.user.image %>" style="width: 50px;height: 50px;" alt="عکس گذارنده نظر">
+                            <img class="d-flex ml-3 rounded-circle" src="<%= comment.user.image || 'assets/img/default-avatar.png' %>" style="width: 50px;height: 50px;" alt="عکس گذارنده نظر">
                             <div class="media-body">
                                 <h5 class="mt-0">
                                     <%= comment.user.name %>
@@ -53,8 +51,8 @@
                 </div>
             </div>
         </div>
-    </div>
-<% }) %>
+    <% }) %>
+</div>
 <!-- Comment -->
 <% if(auth.check) { %>
     <div class="modal fade" id="sendCommentModal" tabindex="-1" role="dialog" aria-labelledby="sendCommentModalLabel" aria-hidden="true" style="display: none;">

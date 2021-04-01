@@ -2,7 +2,7 @@ const controller = require('app/http/controllers/controller');
 const Product = require('../../../models/product');
 const Category = require('../../../models/category');
 const fs = require('fs');
-
+const User = require('../../../models/user');
 class courseController extends controller {
     async index(req , res, next) {
         try {
@@ -25,38 +25,35 @@ class courseController extends controller {
 
     async store(req , res , next) {
         try {
+            if(! await this.validator(req, res)) return;
             
-            await this.validator(req, res);
-
-            let { name, desc, price, count, category } = req.body;
-
-            // create product
-            if(! req.file) {
-                return this.alertAndBack(req, res, {
-                    title: 'لطفا عکسی را برای محصول انتخاب نمایید.',
-                    type: 'error',
-                    toast: true,
-                    position: 'center'
-                })
+            const { name, desc, price, count, category } = req.body;
+            const { image, images } = req.files;
+            
+            const imagesPaths = [];
+            if(images.length > 0) {
+                images.forEach(image => {
+                    imagesPaths.push(image.path.substr(7));
+                });
             }
-
-            let newProduct = new Product({
+            
+            const newProduct = new Product({
                 user : req.user._id,
-                name,
-                desc,
-                category,
-                price,
-                count,
-                image: req.file.path.substr(7),
+                name, desc, category, price, count,
+                image: image[0].path.substr(7),
+                awailable: count > 0 ? true : false,
+                images: imagesPaths
             });
-
-            if(count > 0) newProduct.awailable = true;
-                else newProduct.awailable = false;
-
             await newProduct.save();
 
-            this.sendNotificationEmailToSubscribers(req, res, next, newProduct.id);
+            // this.sendNotificationEmailToSubscribers(req, res, next, newProduct.id);
 
+            this.alert(req, {
+                title: 'کالا با موفقیت به محصولات فروشگاه اضافه شد.',
+                type: 'success',
+                toast: true,
+                position: 'center'
+            })
             return res.redirect('/admin/products');  
         } catch(err) {
             next(err);
@@ -109,13 +106,25 @@ class courseController extends controller {
 
     async destroy(req , res  , next) {
         try {
-            this.isMongoId(req.params.id);
-
+            const { id } = req.params;
+            this.isMongoId(id);
+            
             let product = await Product.findById(req.params.id);
             if( ! product ) this.error('چنین محصولی ای وجود ندارد' , 404);
             
-            // delete Image
-            fs.unlinkSync(`./public/${product.image}`);
+            // delete Images
+            if(product.images.length > 0) {
+                product.images.forEach(image => {
+                    fs.unlinkSync(`./public/${image}`);
+                });
+            }
+
+            (await User.find()).forEach(async (user, index) => {
+                user.cart = user.cart.filter(item => `${item.id}` !== `${id}`);
+                user.favourite = user.favourite.filter(item => `${item.id}` !== `${id}`);
+
+                await user.save()
+            });
 
             // delete products
             product.remove();
@@ -128,6 +137,15 @@ class courseController extends controller {
 
     async validator(req, res) {
         let { name, desc, price, count } = req.body;
+
+        if(req.files.image.length < 1) {
+            return this.alertAndBack(req, res, {
+                title: 'لطفا عکس اصلی محصول را وارد نمایید.',
+                type: 'error',
+                toast: true,
+                position: 'center'
+            })
+        }
             
         if(name == '' || price == '' || desc == '' || count == '') {
             return this.alertAndBack(req, res, {
@@ -156,6 +174,8 @@ class courseController extends controller {
                 position: 'center'
             })
         }
+
+        return true;
     }
 }
 

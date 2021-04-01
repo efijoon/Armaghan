@@ -25,7 +25,7 @@
             </tr>
             </thead>
             <tbody>
-                <% products.docs.forEach(product => { %> 
+                <% products.docs.forEach((product, index) => { %> 
                     <tr>
                         <td><a href="/product?pi=<%= product.id %>"><%= product.name %></a></td>
                         <td><%= product.commentCount %></td>
@@ -40,10 +40,10 @@
                             <% } %>
                         </td>
                         <td>
-                            <form action="/admin/products/<%= product.id %>?_method=DELETE" method="post">
+                            <form id="del-form-<%= index %>" action="/admin/products/<%= product.id %>?_method=DELETE" method="post">
                                 <div class="btn-group btn-group-sm">
                                     <a href="/admin/products/<%= product.id %>/edit"  class="btn btn-info">ویرایش</a>
-                                    <button type="submit" class="btn btn-danger">حذف</button>
+                                    <a onclick="askForDelete('<%= index %>')" type="submit" class="btn btn-danger text-white">حذف</a>
                                 </div>
                             </form>
                         </td>
@@ -55,7 +55,7 @@
         <%- include(viewPath('layouts/pagination') ,{ pagination : products}) %>
     </div>
     
-    
+<script src="/assets/js/ask.js"></script>
 <%
 function numberWithCommas(number) {
   return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");

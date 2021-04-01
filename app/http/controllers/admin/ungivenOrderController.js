@@ -3,7 +3,6 @@ const UngivenOrder = require('../../../models/ungivenOrder');
 const Product = require('../../../models/product');
 const User = require('../../../models/user');
 const GivenOrder = require('../../../models/givenOrder');
-
 class ungivenOrderController extends controller {
     async index(req , res, next) {
         try {
@@ -151,12 +150,11 @@ class ungivenOrderController extends controller {
             await newGivenOrder.save();
             await ungivenOrder.remove();
 
-            return res.redirect('/admin/ungivenOrders');
+            return res.status(200).send('Order Completed ...');
         } catch (err) {
             next(err);
         }
     }
-
 }
 
 module.exports = new ungivenOrderController();

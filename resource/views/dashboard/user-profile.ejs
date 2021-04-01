@@ -88,7 +88,7 @@
           <div class="card card-profile">
             <div class="card-avatar">
               <a href="#pablo">
-                <img class="img" src="/<%= req.user.image %>"/>
+                <img class="img" src="/<%= req.user.image || 'assets/img/default-avatar.png' %>"/>
               </a>
             </div>
             <form action="/uploadProfileImage" method="POST" enctype="multipart/form-data">

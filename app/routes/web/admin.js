@@ -12,7 +12,7 @@ const givenOrderController = require('app/http/controllers/admin/givenOrderContr
 const subscriberController = require('app/http/controllers/admin/subscriberController');
 
 // Helpers
-const upload = require('app/helpers/uploadProductImage');
+const upload = require('../../helpers/uploadProductImage');
 
 // Middlewares
 const convertFileToField = require('app/http/middleware/convertFileToField')
@@ -30,7 +30,11 @@ router.get('/' , adminController.index);
 router.get('/products' , productController.index);
 router.get('/products/create', productController.create);
 router.post('/products/create',
-    upload.single('image'),
+    upload.fields([{
+        name: 'image', maxCount: 1
+    }, {
+        name: 'images', maxCount: 3
+    }]),
     convertFileToField.handle,
     productController.store
 );
