@@ -1,19 +1,181 @@
 <link rel="stylesheet" href="assets/css/products.css">
+<style>
+  .row>.column {
+    padding: 0 8px;
+  }
 
+  .row:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+
+  /* Create four equal columns that floats next to eachother */
+  .column {
+    float: left;
+    width: 10%;
+    overflow: hidden;
+    height: 80px;
+  }
+
+  /* The Modal (background) */
+  .my-modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    padding-top: 50px;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.85);
+    transition: 1s ease-in-out;
+  }
+
+  .my-modal.fade .my-modal-dialog {
+    -webkit-transition: opacity 1.25s linear;
+    -moz-transition: opacity 1.25s linear;
+    -ms-transition: opacity 1.25s linear;
+    -o-transition: opacity 1.25s linear;
+    transition: opacity 1.25s linear;
+  }
+
+  /* Modal Content */
+  .my-modal-content {
+    position: relative;
+    background-color: transparent;
+    margin: auto;
+    padding: 0;
+    width: 70%;
+    max-width: 1200px;
+  }
+
+  /* The Close Button */
+  .close {
+    color: white;
+    position: absolute;
+    top: 10px;
+    right: 25px;
+    font-size: 35px;
+    font-weight: bold;
+  }
+
+  .close:hover,
+  .close:focus {
+    color: #999;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  /* Hide the slides by default */
+  .mySlides {
+    display: none;
+  }
+
+  /* Next & previous buttons */
+  .prev {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    width: auto;
+    padding: 16px;
+    margin-top: -50px;
+    color: white;
+    font-weight: bold;
+    font-size: 20px;
+    transition: 0.6s ease;
+    border-radius: 0 3px 3px 0;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  .next {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    width: auto;
+    padding: 16px;
+    margin-top: -50px;
+    color: white;
+    font-weight: bold;
+    font-size: 20px;
+    transition: 0.6s ease;
+    border-radius: 3px 0 0 3px;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  /* Position the "next button" to the right */
+  .next {
+    left: 0;
+    border-radius: 3px 0 0 3px;
+  }
+
+  .prev {
+    right: 0;
+    border-radius: 3px 0 0 3px;
+  }
+
+  /* On hover, add a black background color with a little bit see-through */
+  .prev:hover,
+  .next:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+  }
+
+  /* Number text (1/3 etc) */
+
+  /* Caption text */
+  .caption-container {
+    text-align: center;
+    background-color: black;
+    padding: 2px 16px;
+    color: white;
+  }
+
+  img.demo {
+    opacity: 0.6;
+    width: 100%;
+    height: 80px;
+  }
+
+  .active,
+  .demo:hover {
+    opacity: 1;
+  }
+
+  img.hover-shadow {
+    transition: 0.3s;
+  }
+
+  .hover-shadow:hover {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  }
+
+  .btn-floating {
+    color: white;
+    display: inline-block;
+    border-radius: 60px;
+    box-shadow: 0px 0px 2px #888;
+    padding: 0.8em 1rem;
+    background-color: #007bff;
+  }
+</style>
 <main id="main">
-
   <!-- ======= Breadcrumbs ======= -->
   <section class="breadcrumbs" style="text-align: right;">
     <div class="row m-5">
       <div class="col-lg-5 col-sm-12">
-        <img data-slide-to="1" src="<%= product.image %>" alt="تصویر اصلی محصول" data-toggle="modal" data-target="#largeModal" style="max-height:100%; max-width:100%;">
+        <img onclick="openModal();currentSlide(1)" src="<%= product.image %>" alt="تصویر اصلی محصول"
+          style="max-height:100%; max-width:100%;">
         <% if(product.images.length> 0) { %>
           <div class="row mt-4">
-            <% product.images.forEach(image=> { %>
+            <% product.images.forEach((image, index)=> { %>
               <div class="col-4">
-                <img src="<%= image %>" alt="تصویر مکمل محصول" data-toggle="modal" data-target="#largeModal" style="max-height:100%; max-width:100%;">
+                <img onclick="openModal();currentSlide(<%= index + 2 %>)" src="<%= image %>" alt="تصویر مکمل محصول"
+                  style="max-height:100%; max-width:100%;">
               </div>
-            <% }) } %>
+              <% }) } %>
           </div>
       </div>
       <div class="col-lg-7 col-sm-12">
@@ -58,62 +220,112 @@
 
     <%- include(viewPath('layouts/comments') , { subject : product , comments : product.comments}) -%>
 
-        <!-- modal -->
-        <div class="modal fade" id="largeModal" tabindex="-1" role="dialog" aria-labelledby="basicModal"
-          aria-hidden="true">
-          <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-              <div class="modal-body">
-                <!-- carousel -->
-                <div id='carouselExampleIndicators' class='carousel slide' data-ride='carousel active'>
-                  <ol class='carousel-indicators'>
-                    <li data-target='#carouselExampleIndicators' data-slide-to='0'></li>
-                    <% if(product.images.length> 0) { %>
-                      <% product.images.forEach((image, index) => { %>
-                        <li data-target='#carouselExampleIndicators' data-slide-to='<%= index+1 %>'></li>
-                    <% }) } %>
-                  </ol>
-                  <div class='carousel-inner'>
-                    <div class='carousel-item active'>
-                      <img class='img-size' src='<%= product.image %>' alt='First slide' style="max-height:100%; max-width:100%;" />
-                    </div>
-                    <% if(product.images.length> 0) { %>
-                      <% product.images.forEach(image=> { %>
-                        <div class='carousel-item'>
-                          <img class='img-size' src='<%= image %>' alt='Second slide' style="max-height:100%; max-width:100%;" />
-                        </div>
-                      <% }) } %>
-                  </div>
-                  <a class='carousel-control-prev' href='#carouselExampleIndicators' role='button' data-slide='prev'>
-                    <span class='carousel-control-prev-icon' aria-hidden='true'></span>
-                    <span class='sr-only'>Previous</span>
-                  </a>
-                  <a class='carousel-control-next' href='#carouselExampleIndicators' role='button' data-slide='next'>
-                    <span class='carousel-control-next-icon' aria-hidden='true'></span>
-                    <span class='sr-only'>Next</span>
-                  </a>
-                </div>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">بستن</button>
-              </div>
-            </div>
+    <div id="myModal" class="my-modal" style="z-index: 999; display: none;">
+      <span class="close cursor" onclick="closeModal()">×</span>
+      <div class="my-modal-content">
+        <div style="position: relative;">
+          <div class="mySlides" style="display: none;justify-content: center;">
+            <img src="<%= product.image %>" style="width:55%">
           </div>
+          <% if(product.images.length> 0) { %>
+            <% product.images.forEach(image=> { %>
+              <div class="mySlides" style="display: none;justify-content: center;">
+                <img src="<%= image %>" style="width:55%">
+              </div>
+              <% }) } %>
+                <br>
+                <a href="#" class="prev" onclick="plusSlides(-1)">❮</a>
+                <a href="#" class="next" onclick="plusSlides(1)">❯</a>
         </div>
 
-        <style>
-          .btn-floating {
-            color: white;
-            display: inline-block;
-            border-radius: 60px;
-            box-shadow: 0px 0px 2px #888;
-            padding: 0.8em 1rem;
-            background-color: #007bff;
-          }
-        </style>
+        <div style="position: relative;background: rgba(0, 0, 0, 0.3);border: 1px solid #888;display: flex;justify-content: center;">
+          <div class="column">
+            <img class="demo" src="<%= product.image %>" onclick="currentSlide('1')" alt="عکس مکمل محصول">
+          </div>
+          <% if(product.images.length> 0) { %>
+            <% product.images.forEach((image, index)=> { %>
+              <div class="column">
+                <img class="demo" src="<%= image %>" onclick="currentSlide('<%= index + 2 %>')" alt="عکس مکمل محصول">
+              </div>
+          <% }) } %>
+        </div>
+      </div>
+    </div>
 
-        <!--Related Products -->
-        <% if(sameCategoryProducts.length> 5) { %>
+      <!--Related Products -->
+      <% if(sameCategoryProducts.length> 5) { %>
+        <div id="product-slider" class="carousel slide carousel-multi-item" data-ride="carousel">
+          <div class="controls-top mt-5" style="justify-content: center;display: flex;">
+            <a class="btn-floating ml-3" href="#product-slider" data-slide="prev"><i
+                class="fas fa-chevron-left"></i></a>
+            <a class="btn-floating waves-effect waves-light mr-3" href="#product-slider" data-slide="next"><i
+                class="fas fa-chevron-right"></i></a>
+          </div>
+
+          <ol class="carousel-indicators">
+            <li data-target="#product-slider" data-slide-to="0" class="active"></li>
+            <li data-target="#product-slider" data-slide-to="1"></li>
+          </ol>
+
+          <!-- Related Products Part -->
+          <div class="carousel-inner" role="listbox">
+
+            <!--First slide-->
+            <div class="carousel-item active">
+
+              <div class="row" style="justify-content: center;">
+                <% for(let i=0; i < 3; i++) { if(sameCategoryProducts[i]) { %>
+                  <div class="col-lg-3 col-sm-12 mx-5 my-5">
+                    <div class="card" style="width: 18rem;">
+                      <img class="card-img-top" src="<%= products[i].image %>" alt="Card image cap">
+                      <div class="card-body">
+                        <h5 class="card-title">
+                          <%= sameCategoryProducts[i].name %>
+                        </h5>
+                        <p class="card-text">
+                          <%= sameCategoryProducts[i].desc %>
+                        </p>
+                        <span class="ml-3">
+                          <%= sameCategoryProducts[i].price %> تومان
+                        </span>
+                        <a href="#" class="btn btn-primary">مشاهده</a>
+                      </div>
+                    </div>
+                  </div>
+                  <% } } %>
+              </div>
+
+            </div>
+            <!--/.First slide-->
+
+            <!--Second slide-->
+            <div class="carousel-item">
+
+              <div class="row" style="justify-content: center;">
+                <% for(let i=0; i < 3; i++) { %>
+                  <div class="col-lg-3 col-sm-12 mx-5 my-5">
+                    <div class="card" style="width: 18rem;">
+                      <img class="card-img-top" src="images/test.jpg" alt="Card image cap">
+                      <div class="card-body">
+                        <h5 class="card-title">تخته نرد</h5>
+                        <p class="card-text">تخته ای متناسب با افکار و روحیات شما عزیزان جهت استفاده در حال و آشپزخانه
+                        </p>
+                        <span class="ml-3">15,000 تومان</span>
+                        <a href="#" class="btn btn-primary">مشاهده</a>
+                      </div>
+                    </div>
+                  </div>
+                  <% } %>
+              </div>
+
+            </div>
+            <!--/.Second slide-->
+
+          </div>
+          <!-- Related Products -->
+
+        </div>
+        <% } else { %>
           <div id="product-slider" class="carousel slide carousel-multi-item" data-ride="carousel">
             <div class="controls-top mt-5" style="justify-content: center;display: flex;">
               <a class="btn-floating ml-3" href="#product-slider" data-slide="prev"><i
@@ -134,25 +346,27 @@
               <div class="carousel-item active">
 
                 <div class="row" style="justify-content: center;">
-                  <% for(let i=0; i < 3; i++) { if(sameCategoryProducts[i]) { %>
-                    <div class="col-lg-3 col-sm-12 mx-5 my-5">
-                      <div class="card" style="width: 18rem;">
-                        <img class="card-img-top" src="<%= products[i].image %>" alt="Card image cap">
-                        <div class="card-body">
-                          <h5 class="card-title">
-                            <%= sameCategoryProducts[i].name %>
-                          </h5>
-                          <p class="card-text">
-                            <%= sameCategoryProducts[i].desc %>
-                          </p>
-                          <span class="ml-3">
-                            <%= sameCategoryProducts[i].price %> تومان
-                          </span>
-                          <a href="#" class="btn btn-primary">مشاهده</a>
+                  <% if(lastSixProducts.length> 0) {
+                    lastSixProducts.forEach((product, index) => {
+                    if(index < 3) { %>
+                      <div class="col-lg-3 col-sm-12 mx-5 my-5">
+                        <div class="card" style="width: 18rem;">
+                          <img class="card-img-top" src="<%= product.image %>" alt="Card image cap">
+                          <div class="card-body">
+                            <h5 class="card-title">
+                              <%= product.name %>
+                            </h5>
+                            <p class="card-text">
+                              <%- product.desc %>
+                            </p>
+                            <span class="ml-3">
+                              <%= product.price %> تومان
+                            </span>
+                            <a href="#" class="btn btn-primary">مشاهده</a>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                    <% } } %>
+                      <% } }) } %>
                 </div>
 
               </div>
@@ -162,20 +376,25 @@
               <div class="carousel-item">
 
                 <div class="row" style="justify-content: center;">
-                  <% for(let i=0; i < 3; i++) { %>
+                  <% if(lastSixProducts.length==6) { for(let i=3; i <=5; i++) { %>
                     <div class="col-lg-3 col-sm-12 mx-5 my-5">
                       <div class="card" style="width: 18rem;">
-                        <img class="card-img-top" src="images/test.jpg" alt="Card image cap">
+                        <img class="card-img-top" src="<%= lastSixProducts[i].image %>" alt="Card image cap">
                         <div class="card-body">
-                          <h5 class="card-title">تخته نرد</h5>
-                          <p class="card-text">تخته ای متناسب با افکار و روحیات شما عزیزان جهت استفاده در حال و آشپزخانه
+                          <h5 class="card-title">
+                            <%= lastSixProducts[i].name %>
+                          </h5>
+                          <p class="card-text">
+                            <%- lastSixProducts[i].desc %>
                           </p>
-                          <span class="ml-3">15,000 تومان</span>
+                          <span class="ml-3">
+                            <%= lastSixProducts[i].price %> تومان
+                          </span>
                           <a href="#" class="btn btn-primary">مشاهده</a>
                         </div>
                       </div>
                     </div>
-                    <% } %>
+                    <% } } %>
                 </div>
 
               </div>
@@ -185,90 +404,65 @@
             <!-- Related Products -->
 
           </div>
-          <% } else { %>
-            <div id="product-slider" class="carousel slide carousel-multi-item" data-ride="carousel">
-              <div class="controls-top mt-5" style="justify-content: center;display: flex;">
-                <a class="btn-floating ml-3" href="#product-slider" data-slide="prev"><i
-                    class="fas fa-chevron-left"></i></a>
-                <a class="btn-floating waves-effect waves-light mr-3" href="#product-slider" data-slide="next"><i
-                    class="fas fa-chevron-right"></i></a>
-              </div>
-
-              <ol class="carousel-indicators">
-                <li data-target="#product-slider" data-slide-to="0" class="active"></li>
-                <li data-target="#product-slider" data-slide-to="1"></li>
-              </ol>
-
-              <!-- Related Products Part -->
-              <div class="carousel-inner" role="listbox">
-
-                <!--First slide-->
-                <div class="carousel-item active">
-
-                  <div class="row" style="justify-content: center;">
-                    <% if(lastSixProducts.length> 0) {
-                      lastSixProducts.forEach((product, index) => {
-                      if(index < 3) { %>
-                        <div class="col-lg-3 col-sm-12 mx-5 my-5">
-                          <div class="card" style="width: 18rem;">
-                            <img class="card-img-top" src="<%= product.image %>" alt="Card image cap">
-                            <div class="card-body">
-                              <h5 class="card-title">
-                                <%= product.name %>
-                              </h5>
-                              <p class="card-text">
-                                <%- product.desc %>
-                              </p>
-                              <span class="ml-3">
-                                <%= product.price %> تومان
-                              </span>
-                              <a href="#" class="btn btn-primary">مشاهده</a>
-                            </div>
-                          </div>
-                        </div>
-                        <% } }) } %>
-                  </div>
-
-                </div>
-                <!--/.First slide-->
-
-                <!--Second slide-->
-                <div class="carousel-item">
-
-                  <div class="row" style="justify-content: center;">
-                    <% if(lastSixProducts.length==6) { for(let i=3; i <=5; i++) { %>
-                      <div class="col-lg-3 col-sm-12 mx-5 my-5">
-                        <div class="card" style="width: 18rem;">
-                          <img class="card-img-top" src="<%= lastSixProducts[i].image %>" alt="Card image cap">
-                          <div class="card-body">
-                            <h5 class="card-title">
-                              <%= lastSixProducts[i].name %>
-                            </h5>
-                            <p class="card-text">
-                              <%- lastSixProducts[i].desc %>
-                            </p>
-                            <span class="ml-3">
-                              <%= lastSixProducts[i].price %> تومان
-                            </span>
-                            <a href="#" class="btn btn-primary">مشاهده</a>
-                          </div>
-                        </div>
-                      </div>
-                      <% } } %>
-                  </div>
-
-                </div>
-                <!--/.Second slide-->
-
-              </div>
-              <!-- Related Products -->
-
-            </div>
-            <% } %>
-
+          <% } %>
   </section>
-
 </main>
 
-
 <% function numberWithCommas(number) { return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "," ); } %>
+
+<script>
+  // Open the Modal
+  function openModal() {
+    const elem = document.getElementById('myModal');
+    let opacity = 0.1;
+    elem.style.opacity = 0.0;
+    elem.style.display = "block";
+
+    const loop = setInterval(() => {
+      elem.style.opacity = opacity;
+      opacity += 0.1;
+      console.log(opacity)
+
+      if(opacity == 1.2) clearInterval(loop);
+    }, 10);
+  }
+
+  // Close the Modal
+  function closeModal() {
+    document.getElementById('myModal').style.display = "none";
+  }
+
+  var slideIndex = 1;
+
+  // Next/previous controls
+  function plusSlides(n) {
+    showSlides(slideIndex += n);
+  }
+
+  // Thumbnail image controls
+  function currentSlide(n) {
+    showSlides(slideIndex = n);
+  }
+
+  function showSlides(n) {
+    var i;
+    var slides = document.getElementsByClassName("mySlides");
+    var dots = document.getElementsByClassName("demo");
+    var captionText = document.getElementById("caption");
+    if (n > slides.length) {
+      slideIndex = 1
+    }
+    if (n < 1) {
+      slideIndex = slides.length
+    }
+    for (i = 0; i < slides.length; i++) {
+      slides[i].style.display = "none";
+    }
+    for (i = 0; i < dots.length; i++) {
+      dots[i].className = dots[i].className.replace(" active", "");
+    }
+    slides[slideIndex - 1].style.display = "flex";
+    dots[slideIndex - 1].className += " active";
+  }
+
+</script>

@@ -457,11 +457,7 @@ class ProductController extends controller {
               postalCode,
               city
             });
-            console.log(address,
-              telephone,
-              postalCode,
-              city)
-  
+
             user.cart.forEach((p) => {
               payment.products.push({ id: p.id, count: p.count });
             });
