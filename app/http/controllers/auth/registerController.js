@@ -26,7 +26,16 @@ class registerController extends controller {
       });
     }
 
-    this.emailValidator(req, res, email);
+    if (!this.emailValidator(email)) {
+      return this.alertAndBack(req, res, {
+        position: "center",
+        type: "error",
+        title: "لطفا یک ایمیل معتبر را وارد کنید.",
+        showConfirmButton: false,
+        toast: true,
+        timer: 4000,
+      });
+    }
 
     passport.authenticate("local.register", async (err, newUser) => {
 

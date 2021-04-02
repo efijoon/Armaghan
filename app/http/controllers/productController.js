@@ -266,7 +266,7 @@ class ProductController extends controller {
     if (!this.isMongoId(req.params.id)) return this.back(req, res);
 
     const user = await User.findById(req.user.id).populate({
-      path: "products.id",
+      path: "products.productId",
     });
 
     res.render("product/boughtProducts", { user, layout: "dashboard/master" });
@@ -366,9 +366,18 @@ class ProductController extends controller {
 
   async payment(req, res, next) {
     try {
-      let { address, telephone, city, username, email, postalCode } = req.body;
+      let { address, telephone, city, username, email, postalCode, province, password } = req.body;
 
-      if (address == "" || telephone == "" || email == "" || postalCode == "" || city == "") {
+      if (! req.isAuthenticated() && ! password) {
+        return this.alertAndBack(req, res, {
+          title: "لطفا مقادیر خواسته شده را وارد کنید.",
+          type: "error",
+          toast: true,
+          position: "center",
+        });
+      }
+
+      if(!address || ! telephone || ! email || ! postalCode || ! city || ! province) {
         return this.alertAndBack(req, res, {
           title: "لطفا مقادیر خواسته شده را وارد کنید.",
           type: "error",
@@ -386,10 +395,33 @@ class ProductController extends controller {
         });
       }
 
+      if (!this.emailValidator(email)) {
+        return this.alertAndBack(req, res, {
+          position: "center",
+          type: "error",
+          title: "لطفا یک ایمیل معتبر را وارد کنید.",
+          showConfirmButton: false,
+          toast: true,
+          timer: 4000,
+        });
+      }
+
+      const existingUser = await User.findOne({ email });
+      if(existingUser) {
+        this.alert(req, {
+          title: "کاربری با چنین ایمیلی در سایت موجود میباشد.",
+          type: "error",
+          toast: true,
+          position: "center",
+        });
+
+        return this.back(req, res);
+      }
+
       let Amount = 0;
       let productIds = [];
-
       let user;
+
       if(req.isAuthenticated()) {
         user = await User.findById(req.user.id);
         if (user.cart.length <= 0) {
@@ -445,7 +477,6 @@ class ProductController extends controller {
 
       request(options)
         .then(async (data) => {
-          
           if(req.isAuthenticated()) {
             let payment = new Payment({
               user: req.user.id,
@@ -455,7 +486,9 @@ class ProductController extends controller {
               address,
               telephone,
               postalCode,
-              city
+              city,
+              province,
+              email
             });
 
             user.cart.forEach((p) => {
@@ -471,7 +504,10 @@ class ProductController extends controller {
               address,
               telephone,
               postalCode,
-              city
+              city,
+              province,
+              password,
+              email
             });
             
             this.cart.forEach((p) => {
@@ -481,9 +517,7 @@ class ProductController extends controller {
             await payment.save();
           }
 
-          res.redirect(
-            `https://www.zarinpal.com/pg/StartPay/${data.Authority}`
-          );
+          res.redirect(`https://www.zarinpal.com/pg/StartPay/${data.Authority}`);
         })
         .catch((err) => res.json(err.message));
     } catch (err) {
@@ -493,7 +527,6 @@ class ProductController extends controller {
 
   async checker(req, res, next) { 
     try {
-
       if (req.query.Status && req.query.Status !== "OK") {
         return this.alertAndBack(req, res, {
           title: "دقت کنید",
@@ -525,72 +558,72 @@ class ProductController extends controller {
       request(options)
         .then(async (data) => {
           if (data.Status == 100) {
-
-            // thep = the product
             let boughtProduct;
-            let userBoughtProductsID = [];
+            let user;
+
+            if(req.isAuthenticated()) user = await User.findById(req.user.id);
+              else {
+                const fullName = payment.username.split(' ');
+                user = new User({
+                  name: fullName[0],
+                  family: fullName[1],
+                  email: payment.email,
+                  address: payment.address,
+                  telephone: payment.telephone,
+                });
+  
+                user.password = user.hashPassword(payment.password);
+                await user.save();
+              }
 
             payment.set({ payment: true });
-
-            if(req.isAuthenticated()) {
-              let user = await User.findById(req.user.id);
-
-              user.points += 10;
-              user.cart = [];
-              
-              user.products.forEach((product) => {
-                userBoughtProductsID.push(`${product.id}`);
-              });
-            } else {
-              this.cart = [];
-            }
 
             let ungivenOrders = await UngivenOrder.find();
             const newUngivenOrder = await UngivenOrder({
               index: ungivenOrders.length + 1,
               address: payment.address,
               telephone: payment.telephone,
-              customer: payment.username,
+              customer: user._id,
               city: payment.city,
               postalCode: payment.postalCode
             });
 
             payment.products.forEach(async (p) => {
-              if (userBoughtProductsID.indexOf(p.id) == -1) {
-                // User hadn't baught this product yet
-                if(req.isAuthenticated()) user.products.push({ id: p.id, count: p.count }); 
-              } else {
-                // User had baught this product in past
-                if(req.isAuthenticated())  {
-                  user.products.forEach((userProduct) => {
-                    if (userProduct.id == p.id) userProduct.count += p.count;
-                  });
-                }
-              }
+              user.products.push({ productId: p.id, count: p.count }); 
+              
               newUngivenOrder.products.push({ product: p.id, count: p.count });
 
               boughtProduct = await Product.findById(p.id);
               boughtProduct.count -= p.count;
               await boughtProduct.save();
             });
+            
+            payment.set({ password: '' });
+            user.points += 10;
+            user.cart = [];
+            this.cart = [];
 
             await newUngivenOrder.save();
+            await user.save();
             await payment.save();
-            req.user && await user.save();
 
             this.alert(req, {
               title: "با تشکر",
-              message: "عملیات مورد نظر با موفقیت انجام شد",
+              message: "عملیات مورد نظر با موفقیت انجام شد. برای پیگیری سفارش خرید خود به قسمت سفارشات خریداری شده مراجعه کنید.",
               type: "success",
               button: "بسیار خوب",
+              timer: 60000
             });
 
-            if(req.isAuthenticated()) {
-              res.redirect("/dashboard/dashboard");
-            } else {
-              res.redirect("/");
-            }
-
+            let login = false;
+            if(! req.isAuthenticated()) {
+              req.logIn(user, (err) => {
+                login = true;
+                return res.redirect("/dashboard/dashboard");
+              });
+            }           
+            
+            if(! login) return res.redirect("/dashboard/dashboard");
           } else {
             this.alertAndBack(req, res, {
               title: "پرداخت شما با موفقیت انجام نشد",
@@ -610,7 +643,7 @@ class ProductController extends controller {
 
   async comment(req, res, next) {
     try {
-      if (req.body.comment == "" || req.body.product == "") {
+      if (! req.body.comment || ! req.body.product) {
         return this.alertAndBack(req, res, {
           title: "لطفا تمامی مقادیر لازم را وارد کنید.",
           type: "success",

@@ -9,7 +9,7 @@ class GivenOrderController extends controller {
         try {
             let page = req.query.page || 1;
             let givenOrders = await GivenOrder.paginate({ sent: true } , { page , sort : { createdAt : 1 } , limit : 5,
-                populate: { path: 'products.product', select: 'name' },
+                populate: [{ path: 'products.product', select: 'name' }, { path: 'customer', select: 'name family' }],
             });
 
             res.render('admin/givenOrder/index',  { title : 'سفارش های تحویل داده شده' , givenOrders });
@@ -27,7 +27,7 @@ class GivenOrderController extends controller {
     async view(req , res) {
         this.isMongoId(req.params.id);
         let products = await Product.find();
-        let givenOrder = await (await GivenOrder.findById(req.params.id).populate({ path: 'products.product', select: 'name' }));
+        let givenOrder = await (await GivenOrder.findById(req.params.id).populate([{ path: 'products.product', select: 'name' }, { path: 'customer', select: 'name family' }]));
 
         if( ! givenOrder ) this.error('چنین سفارشی وجود ندارد' , 404);
 
@@ -36,7 +36,6 @@ class GivenOrderController extends controller {
 
     async store(req , res , next) {
         try {
-        
             let { address, telephone, customer, products, productsCount } = req.body;
 
             let Orders = await GivenOrder.find();
@@ -65,9 +64,9 @@ class GivenOrderController extends controller {
 
     async edit(req, res ,next) {
         try {
-            this.isMongoId(req.params.id);
+            if(! this.isMongoId(req.params.id)) return;
 
-            let givenOrder = await (await GivenOrder.findById(req.params.id).populate({ path: 'products.product', select: 'name' }));
+            let givenOrder = await (await GivenOrder.findById(req.params.id).populate([{ path: 'products.product', select: 'name' }, { path: 'customer', select: 'name family' }]));
             let products = await Product.find();
 
             let productIDs = [];
@@ -138,7 +137,9 @@ class GivenOrderController extends controller {
             let givenOrder = await GivenOrder.findById(req.params.id);
             if( ! givenOrder ) this.error('چنین سفارشی وجود ندارد' , 404);
 
+            const user = await User.findById(givenOrder.customer);
             let orders = await UngivenOrder.find();
+
             let newUngivenOrder = new UngivenOrder({
                 index: orders.length + 1,
                 address: givenOrder.address,
@@ -147,6 +148,16 @@ class GivenOrderController extends controller {
                 products: givenOrder.products
             })
 
+            const givenOrderProductIds = [];
+            givenOrder.products.forEach(product => {
+                givenOrderProductIds.push(`${product.product}`);
+            });
+
+            user.products.forEach(product => {
+                if(givenOrderProductIds.includes(`${product.productId}`)) product.status = 'ungiven';
+            });
+
+            await user.save();
             await newUngivenOrder.save();
             await givenOrder.remove();
 

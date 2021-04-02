@@ -20,7 +20,7 @@
                             <%= givenOrder.index %>
                         </a></td>
                     <td>
-                        <%= givenOrder.customer %>
+                        <%= givenOrder.customer.name + ' ' + givenOrder.customer.family %>
                     </td>
                     <td>
                         <% givenOrder.products.forEach(p => { %>

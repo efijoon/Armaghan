@@ -7,7 +7,7 @@
         <div class="form-group row">
             <div class="col">
                 <label for="customer" class="control-label font-weight-bold">سفارش دهنده</label>
-                <input type="text" class="form-control" placeholder="نام سفارش دهنده را وارد کنید" value="<%= old('customer' , ungivenOrder.customer) %>" readonly>
+                <input type="text" class="form-control" placeholder="نام سفارش دهنده را وارد کنید" value="<%= old('customer' , ungivenOrder.customer.name + ' ' + ungivenOrder.customer.family) %>" readonly>
             </div>
         </div>
 

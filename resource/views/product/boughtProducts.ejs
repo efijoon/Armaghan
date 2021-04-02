@@ -28,7 +28,7 @@
           <div class="card">
             <div class="card-header card-header-rose card-header-icon">
               <div class="card-icon">
-                <i class="fas fa-heart" style="font-size: 25px;"></i>
+                <i class="fa fa-shopping-cart" style="font-size: 25px;"></i>
               </div>
               <h4 class="card-title">محصولات خریداری شده</h4>
             </div>
@@ -44,25 +44,26 @@
                         <th class="text-center">تعداد خریداری شده</th>
                         <th class="text-right"></th>
                         <th class="text-right">قیمت (تومان)</th>
-                        <th></th>
+                        <th>وضعیت سفارش</th>
                       </tr>
                     </thead>
                     <tbody>
                       <% user.products.forEach((product, index) => { %>
-                        <tr id="<%= product.id %>">
+                        <tr id="<%= product.productId %>">
                           <td>
                             <div class="img-container">
-                              <img src="/<%= product.id.image %>" alt="...">
+                              <img src="/<%= product.productId.image %>" alt="...">
                             </div>
                           </td>
                           <td class="td-name">
-                            <a href="/product?pi=<%= product.id.id %>"><%= product.id.name %></a>
+                            <a href="/product?pi=<%= product.productId.id %>"><%= product.productId.name %></a>
                             <br />
                           </td>
                           <td></td>
                           <td class="td-number text-center"><%= product.count %></td>
                           <td class="td-number text-center"></td>
-                          <td class="td-number product-price" id="product-price-<%= index %>"><%= numberWithCommas(product.id.price) %></td>
+                          <td class="td-number product-price" id="product-price-<%= index %>"><%= numberWithCommas(product.productId.price) %></td>
+                          <td><%= product.status == 'ungiven' ? 'تحویل داده نشده' : 'تحویل داده شده' %></td>
                         </tr>
                       <% }) %>
 

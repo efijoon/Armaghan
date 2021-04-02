@@ -22,6 +22,6 @@ productSchema.virtual('comments' , {
     ref : 'Comment',
     localField : '_id',
     foreignField : 'product'
-})
+});
 
 module.exports = mongoose.model('Product' , productSchema);

@@ -1,8 +1,8 @@
-const autoBind = require('auto-bind');
-const isMongoId = require('validator/lib/isMongoId');
+const autoBind = require("auto-bind");
+const isMongoId = require("validator/lib/isMongoId");
 const mail = require("app/helpers/mail");
-const { validationResult } = require('express-validator/check');
-const Subscriber = require('../../models/subscriber');
+const { validationResult } = require("express-validator/check");
+const Subscriber = require("../../models/subscriber");
 
 module.exports = class controller {
   constructor() {
@@ -15,7 +15,7 @@ module.exports = class controller {
   }
 
   isMongoId(paramId) {
-    if(! paramId) return false;
+    if (!paramId) return false;
     if (!isMongoId(paramId)) return false;
 
     return true;
@@ -39,9 +39,17 @@ module.exports = class controller {
       button = data.button || null,
       timer = data.timer || 6000,
       toast = data.toast || false,
-      position = data.position || 'center';
+      position = data.position || "center";
 
-    req.flash("SAmessages", { title, message, type, button, timer, toast, position });
+    req.flash("SAmessages", {
+      title,
+      message,
+      type,
+      button,
+      timer,
+      toast,
+      position,
+    });
   }
 
   async alertAndBack(req, res, data) {
@@ -52,7 +60,7 @@ module.exports = class controller {
   async sendNotificationEmailToSubscribers(req, res, next, productID) {
     try {
       let subscribers = await Subscriber.find();
-      subscribers.forEach(sub => {
+      subscribers.forEach((sub) => {
         let mailOptions = {
           from: '"فروشگاه اینترنتی ارمغان', // sender address
           to: sub.email, // list of receivers
@@ -64,41 +72,34 @@ module.exports = class controller {
             </div>
           `, // html body
         };
-  
+
         mail.sendMail(mailOptions, (err, info) => {
           if (err) return console.log(err);
-          console.log(`Message sent: ${info} `)
+          console.log(`Message sent: ${info} `);
         });
-      })
+      });
     } catch (err) {
       next(err);
     }
   }
 
-  async emailValidator(req, res, str) {
+  emailValidator(str) {
     let p = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/;
-    if (!p.test(str)) {
-        return this.alertAndBack(req, res, {
-          position: 'top-end',
-          type: 'error',
-          title: 'لطفا یک ایمیل معتبر را وارد کنید.',
-          showConfirmButton: false,
-          toast: true,
-          timer: 4000
-      })
-    }
+    if (!p.test(str)) return false;
+    
+    return true;
   }
 
   async validationData(req) {
     const result = validationResult(req);
-    if (! result.isEmpty()) {
-        const errors = result.array();
-        const messages = [];
-       
-        errors.forEach(err => messages.push(err.msg));
-        req.flash('errors' , messages)
+    if (!result.isEmpty()) {
+      const errors = result.array();
+      const messages = [];
 
-        return false;
+      errors.forEach((err) => messages.push(err.msg));
+      req.flash("errors", messages);
+
+      return false;
     }
 
     return true;
@@ -107,7 +108,7 @@ module.exports = class controller {
   just_number(str) {
     let n = /^\d+$/;
 
-    if (! n.test(str)) return false;
+    if (!n.test(str)) return false;
     return true;
   }
 };

@@ -10,7 +10,11 @@ const paymentSchema = Schema({
     address : { type : String , required : true},
     telephone : { type : String , required : true},
     postalCode : { type : String , required : true},
+    email : { type : String , required : true},
     city : { type : String , required : true},
+    province : { type : String , required : true},
+    password : { type : String , default : '' },
+    code : { type : Number , default : Math.floor(1000 + Math.random() * 90000) },
     price : { type : Number , required : true},
     payment : { type : Boolean , default : false },
 } , { timestamps : true , toJSON : { virtuals : true } });

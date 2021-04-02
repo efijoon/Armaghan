@@ -18,7 +18,7 @@ const givenOrdersSchema = Schema({
     ],
     address : { type : String , required : true},
     telephone : { type : String , required : true},
-    customer : { type : String, required : true},
+    customer : { type : Schema.Types.ObjectId, ref: 'User', required : true},
     sent : { type : Boolean, default : true },
 } , { timestamps : true , toJSON : { virtuals : true } });
 

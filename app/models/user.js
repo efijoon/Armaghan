@@ -17,13 +17,17 @@ const userSchema = Schema({
     points : { type : Number ,  default : 0 },
     products : { type : [
         {
-        id: {
+        productId: {
             type: Schema.Types.ObjectId,
             ref: 'Product',
             required: true
         },
         count: {
             type: Number
+        },
+        status: {
+            type: String,
+            default: 'ungiven'
         }
       }
     ] ,  default : [] },

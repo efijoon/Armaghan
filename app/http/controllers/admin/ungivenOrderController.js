@@ -8,7 +8,7 @@ class ungivenOrderController extends controller {
         try {
             let page = req.query.page || 1;
             let ungivenOrders = await UngivenOrder.paginate({ sent: false } , { page , sort : { createdAt : 1 } , limit : 5,
-                populate: { path: 'products.product', select: 'name' },
+                populate: [{ path: 'products.product', select: 'name' }, { path: 'customer', select: 'name family' }],
             });
             // return res.send(ungivenOrders)
 
@@ -27,7 +27,7 @@ class ungivenOrderController extends controller {
     async view(req , res) {
         this.isMongoId(req.params.id);
         let products = await Product.find();
-        let ungivenOrder = await (await UngivenOrder.findById(req.params.id).populate({ path: 'products.product', select: 'name' }));
+        let ungivenOrder = await (await UngivenOrder.findById(req.params.id).populate([{ path: 'products.product', select: 'name' }, { path: 'customer', select: 'name family' }]));
 
         if( ! ungivenOrder ) this.error('چنین سفارشی وجود ندارد' , 404);
 
@@ -67,7 +67,7 @@ class ungivenOrderController extends controller {
         try {
             this.isMongoId(req.params.id);
 
-            let ungivenOrder = await (await UngivenOrder.findById(req.params.id).populate({ path: 'products.product', select: 'name' }));
+            let ungivenOrder = await (await UngivenOrder.findById(req.params.id).populate([{ path: 'products.product', select: 'name' }, { path: 'customer', select: 'name family' }]));
             let products = await Product.find();
 
             let productIDs = [];
@@ -90,7 +90,7 @@ class ungivenOrderController extends controller {
 
     async update(req, res , next) {
         try {
-            let { address, telephone, customer, products, productsCount } = req.body;
+            let { address, telephone, products, productsCount } = req.body;
             
             let ungivenOrder = await UngivenOrder.findById(req.params.id);
             ungivenOrder.products = [];
@@ -105,7 +105,6 @@ class ungivenOrderController extends controller {
 
             ungivenOrder.address = address;
             ungivenOrder.telephone = telephone;
-            ungivenOrder.customer = customer;
 
             await ungivenOrder.save();
 
@@ -136,16 +135,28 @@ class ungivenOrderController extends controller {
             this.isMongoId(req.params.id);
 
             let ungivenOrder = await UngivenOrder.findById(req.params.id);
-            if( ! ungivenOrder ) this.error('چنین سفارشی وجود ندارد' , 404);
+            if(! ungivenOrder ) this.error('چنین سفارشی وجود ندارد' , 404);
 
             let orders = await GivenOrder.find();
+            const user = await User.findById(ungivenOrder.customer);
+            
             let newGivenOrder = new GivenOrder({
                 index: orders.length + 1,
                 address: ungivenOrder.address,
                 telephone: ungivenOrder.telephone,
                 customer: ungivenOrder.customer,
                 products: ungivenOrder.products
-            })
+            });
+            
+            const ungivenOrderProductIds = [];
+            ungivenOrder.products.forEach(product => {
+                ungivenOrderProductIds.push(`${product.product}`);
+            });
+
+            user.products.forEach(product => {
+                if(ungivenOrderProductIds.includes(`${product.productId}`)) product.status = 'given';
+            });
+            await user.save();
 
             await newGivenOrder.save();
             await ungivenOrder.remove();

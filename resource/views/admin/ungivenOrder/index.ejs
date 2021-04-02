@@ -23,7 +23,7 @@
                             <%= ungivenOrder.index %>
                         </a></td>
                     <td>
-                        <%= ungivenOrder.customer %>
+                        <%= ungivenOrder.customer.name + ' ' + ungivenOrder.customer.family %>
                     </td>
                     <td>
                         <% ungivenOrder.products.forEach(p=> { %>
@@ -77,6 +77,10 @@
                     url,
                     success: () => {
                         elem.parent().parent().remove();
+                    },
+                    error: (j, text, err) => {
+                        console.log('Salam')
+                        console.log(text)
                     }
                 });
             }
