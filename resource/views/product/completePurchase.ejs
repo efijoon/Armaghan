@@ -39,38 +39,38 @@
     <div class="form-row">
       <div class="form-group col-md-6">
         <label for="province">استان ارسال <span style="color: red;">*</span></label>
-        <select value="<%= old('province') %>" name="province" class="form-control selectpicker" data-live-search="true">
-          <option value="تهران" data-tokens="2">تهران</option>
-          <option value="خوزستان" data-tokens="1">خوزستان</option>
-          <option value="ایلام" data-tokens="3">ایلام</option>
-          <option value="بوشهر" data-tokens="4">بوشهر</option>
-          <option value="اردبیل" data-tokens="5">اردبیل</option>
-          <option value="اصفهان" data-tokens="6">اصفهان</option>
-          <option value="یزد" data-tokens="7">یزد</option>
-          <option value="کرمانشاه" data-tokens="8">کرمانشاه</option>
-          <option value="کرمان" data-tokens="9">کرمان</option>
-          <option value="همدان" data-tokens="10">همدان</option>
-          <option value="قزوین" data-tokens="11">قزوین</option>
-          <option value="زنجان" data-tokens="12">زنجان</option>
-          <option value="لرستان" data-tokens="13">لرستان</option>
-          <option value="البرز" data-tokens="14">البرز</option>
-          <option value="آذربایجان شرقی" data-tokens="15">آذربایجان شرقی</option>
-          <option value="آذربایجان غربی" data-tokens="16">آذربایجان غربی</option>
-          <option value="چهارمحال و بختیاری" data-tokens="17">چهارمحال و بختیاری</option>
-          <option value="خراسان جنوبی" data-tokens="18">خراسان جنوبی</option>
-          <option value="خراسان رضوی" data-tokens="19">خراسان رضوی</option>
-          <option value="خراسان شمالی" data-tokens="20">خراسان شمالی</option>
-          <option value="سمنان" data-tokens="21">سمنان</option>
-          <option value="فارس" data-tokens="22">فارس</option>
-          <option value="قم" data-tokens="23">قم</option>
-          <option value="کردستان" data-tokens="24">کردستان</option>
-          <option value="کهگیلویه و بویراحمد" data-tokens="25">کهگیلویه و بویراحمد</option>
-          <option value="گلستان" data-tokens="26">گلستان</option>
-          <option value="گیلان" data-tokens="27">گیلان</option>
-          <option value="مازندران" data-tokens="28">مازندران</option>
-          <option value="مرکزی" data-tokens="29">مرکزی</option>
-          <option value="هرمزگان" data-tokens="30">هرمزگان</option>
-          <option value="سیستان و بلوچستان" data-tokens="31">سیستان و بلوچستان</option>
+        <select name="province" class="form-control selectpicker" data-live-search="true">
+          <option value="تهران" data-tokens="2" <%= old('province') == 'تهران' && 'selected' %> >تهران</option>
+          <option value="خوزستان" data-tokens="1" <%= old('province') == 'خوزستان' && 'selected' %> >خوزستان</option>
+          <option value="ایلام" data-tokens="3" <%= old('province') == 'ایلام' && 'selected' %> >ایلام</option>
+          <option value="بوشهر" data-tokens="4" <%= old('province') == 'بوشهر' && 'selected' %> >بوشهر</option>
+          <option value="اردبیل" data-tokens="5" <%= old('province') == 'اردبیل' && 'selected' %> >اردبیل</option>
+          <option value="اصفهان" data-tokens="6" <%= old('province') == 'اصفهان' && 'selected' %> >اصفهان</option>
+          <option value="یزد" data-tokens="7" <%= old('province') == 'یزد' && 'selected' %> >یزد</option>
+          <option value="کرمانشاه" data-tokens="8" <%= old('province') == 'کرمانشاه' && 'selected' %> >کرمانشاه</option>
+          <option value="کرمان" data-tokens="9" <%= old('province') == 'کرمان' && 'selected' %> >کرمان</option>
+          <option value="همدان" data-tokens="10" <%= old('province') == 'همدان' && 'selected' %> >همدان</option>
+          <option value="قزوین" data-tokens="11" <%= old('province') == 'قزوین' && 'selected' %> >قزوین</option>
+          <option value="زنجان" data-tokens="12" <%= old('province') == 'زنجان' && 'selected' %> >زنجان</option>
+          <option value="لرستان" data-tokens="13" <%= old('province') == 'لرستان' && 'selected' %> >لرستان</option>
+          <option value="البرز" data-tokens="14" <%= old('province') == 'البرز' && 'selected' %> >البرز</option>
+          <option value="آذربایجان شرقی" data-tokens="15" <%= old('province') == 'آذربایجان شرقی' && 'selected' %> >آذربایجان شرقی</option>
+          <option value="آذربایجان غربی" data-tokens="16" <%= old('province') == 'آذربایجان غربی' && 'selected' %> >آذربایجان غربی</option>
+          <option value="چهارمحال و بختیاری" data-tokens="17" <%= old('province') == 'چهارمحال و بختیاری' && 'selected' %> >چهارمحال و بختیاری</option>
+          <option value="خراسان جنوبی" data-tokens="18" <%= old('province') == 'خراسان جنوبی' && 'selected' %> >خراسان جنوبی</option>
+          <option value="خراسان رضوی" data-tokens="19" <%= old('province') == 'خراسان رضوی' && 'selected' %> >خراسان رضوی</option>
+          <option value="خراسان شمالی" data-tokens="20" <%= old('province') == 'خراسان شمالی' && 'selected' %> >خراسان شمالی</option>
+          <option value="سمنان" data-tokens="21" <%= old('province') == 'سمنان' && 'selected' %> >سمنان</option>
+          <option value="فارس" data-tokens="22" <%= old('province') == 'فارس' && 'selected' %> >فارس</option>
+          <option value="قم" data-tokens="23" <%= old('province') == 'قم' && 'selected' %> >قم</option>
+          <option value="کردستان" data-tokens="24" <%= old('province') == 'کردستان' && 'selected' %> >کردستان</option>
+          <option value="کهگیلویه و بویراحمد" data-tokens="25" <%= old('province') == 'کهگیلویه و بویراحمد' && 'selected' %> >کهگیلویه و بویراحمد</option>
+          <option value="گلستان" data-tokens="26" <%= old('province') == 'گلستان' && 'selected' %> >گلستان</option>
+          <option value="گیلان" data-tokens="27" <%= old('province') == 'گیلان' && 'selected' %> >گیلان</option>
+          <option value="مازندران" data-tokens="28" <%= old('province') == 'مازندران' && 'selected' %> >مازندران</option>
+          <option value="مرکزی" data-tokens="29" <%= old('province') == 'مرکزی' && 'selected' %> >مرکزی</option>
+          <option value="هرمزگان" data-tokens="30" <%= old('province') == 'هرمزگان' && 'selected' %> >هرمزگان</option>
+          <option value="سیستان و بلوچستان" data-tokens="31" <%= old('province') == 'سیستان و بلوچستان' && 'selected' %> >سیستان و بلوچستان</option>
         </select>
       </div>
       <div class="form-group col-md-6">

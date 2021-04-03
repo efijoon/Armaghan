@@ -420,7 +420,7 @@ class ProductController extends controller {
       }
 
       const existingUser = await User.findOne({ email });
-      if(existingUser) {
+      if(existingUser && ! req.isAuthenticated()) {
         this.alert(req, {
           title: "کاربری با چنین ایمیلی در سایت موجود میباشد.",
           type: "error",
