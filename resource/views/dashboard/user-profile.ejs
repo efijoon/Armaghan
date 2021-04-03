@@ -52,18 +52,28 @@
                   </div>
                 </div>
                 <div class="row my-4">
-                  <div class="col-md-12">
+                  <div class="col-md-6">
                     <div class="form-group">
                       <label class="bmd-label-floating">ایمیل</label>
                       <input type="text" name="email" value="<%= req.user.email %>" class="form-control">
                     </div>
                   </div>
+                  <div class="form-group col-md-6">
+                      <label class="bmd-label-floating">شهر</label>
+                    <input value="<%= req.user.city %>" name="city" type="text" class="form-control">
+                  </div>
                 </div>
                 <div class="row">
-                  <div class="col-md-12">
+                  <div class="col-md-6">
                     <div class="form-group">
                       <label class="bmd-label-floating">تلفن پشتیبانی</label>
                       <input type="text" name="telephone" value="<%= req.user.telephone %>" class="form-control">
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label class="bmd-label-floating">کد پستی</label>
+                      <input type="text" name="postalCode" value="<%= req.user.postalCode %>" class="form-control">
                     </div>
                   </div>
                 </div>

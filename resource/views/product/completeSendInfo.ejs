@@ -1,8 +1,8 @@
 <link rel="stylesheet" href="assets/bootstrap-select/css/bootstrap-select.min.css">
 <style>
-    .dropdown-menu .show {
-        text-align: right;
-    }
+  .dropdown-menu .show {
+    text-align: right;
+  }
 </style>
 
 <div class="main-panel ps">
@@ -18,7 +18,8 @@
         </div>
         <a class="navbar-brand" href="javascript:;" dideo-checked="true">تکمیل اطلاعات خرید</a>
       </div>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
+      <button class="navbar-toggler" type="button" data-toggle="collapse" aria-controls="navigation-index"
+        aria-expanded="false" aria-label="Toggle navigation">
         <span class="sr-only">Toggle navigation</span>
         <span class="navbar-toggler-icon icon-bar"></span>
         <span class="navbar-toggler-icon icon-bar"></span>
@@ -38,7 +39,18 @@
               </div>
             </div>
             <div class="card-body ">
-              <form class="form-horizontal" action="/products/payment" method="POST">
+              <form class="form-horizontal" action="/products/payment" method="POST" style="text-align: right;">
+                <div class="form-row">
+                  <div class="form-group col-md-6">
+                    <input value="<%= old('username', req.user.name + ' ' + req.user.family) %>" type="username" name="username" class="form-control" id="username"
+                      placeholder="نام و نام خوانوادگی">
+                  </div>
+                  <div class="form-group col-md-6">
+                    <input value="<%= old('email', req.user.email) %>" type="" name="email" class="form-control" id="inputEmail4"
+                      placeholder="ایمیل">
+                  </div>
+                </div>
+                <br>
                 <div class="row">
                   <label class="col-md-3 col-form-label">محل ارسال محصول:</label>
                   <div class="col-md-9">
@@ -47,6 +59,7 @@
                     </div>
                   </div>
                 </div>
+                <br>
                 <div class="row">
                   <label class="col-md-3 col-form-label">شماره تماس جهت پیگیری خرید:</label>
                   <div class="col-md-3">
@@ -54,44 +67,81 @@
                       <input type="text" name="telephone" class="form-control" value="<%= req.user.telephone %>">
                     </div>
                   </div>
-                  <label class="col-md-1 col-form-label mt-2 mr-3" for="inputZip">کدپستی</label>
-                  <div class="col-md-4">
+                  <div class="col-md-6">
                     <div class="form-group bmd-form-group">
-                      <input value="<%= old('postalCode') %>" name="postalCode" name="postalCode" type="text" class="form-control" id="کدپستی">
+                      <input value="<%= old('postalCode', req.user.postalCode) %>" name="postalCode" name="postalCode" type="text"
+                        class="form-control" placeholder="کدپستی">
                     </div>
                   </div>
                 </div>
-                <div class="form-row mt-5">
+                <br>
+                <label class="mt-3" for="province">استان ارسال</label>
+                <div class="form-row mt-2">
                   <div class="form-group col-md-6">
-                    <select value="<%= old('city') %>" name="city" class="form-control selectpicker" data-live-search="true">
-                        <option value="esfahan" data-tokens="esfahan">اصفهان</option>
-                        <option value="tehran" data-tokens="tehran">تهران</option>
-                        <option value="mashad" data-tokens="mashad">مشهد</option>
-                      </select>
+                    <select value="<%= old('province') %>" name="province" class="form-control selectpicker" data-live-search="true">
+                      <option value="تهران" data-tokens="2">تهران</option>
+                      <option value="خوزستان" data-tokens="1">خوزستان</option>
+                      <option value="ایلام" data-tokens="3">ایلام</option>
+                      <option value="بوشهر" data-tokens="4">بوشهر</option>
+                      <option value="اردبیل" data-tokens="5">اردبیل</option>
+                      <option value="اصفهان" data-tokens="6">اصفهان</option>
+                      <option value="یزد" data-tokens="7">یزد</option>
+                      <option value="کرمانشاه" data-tokens="8">کرمانشاه</option>
+                      <option value="کرمان" data-tokens="9">کرمان</option>
+                      <option value="همدان" data-tokens="10">همدان</option>
+                      <option value="قزوین" data-tokens="11">قزوین</option>
+                      <option value="زنجان" data-tokens="12">زنجان</option>
+                      <option value="لرستان" data-tokens="13">لرستان</option>
+                      <option value="البرز" data-tokens="14">البرز</option>
+                      <option value="آذربایجان شرقی" data-tokens="15">آذربایجان شرقی</option>
+                      <option value="آذربایجان غربی" data-tokens="16">آذربایجان غربی</option>
+                      <option value="چهارمحال و بختیاری" data-tokens="17">چهارمحال و بختیاری</option>
+                      <option value="خراسان جنوبی" data-tokens="18">خراسان جنوبی</option>
+                      <option value="خراسان رضوی" data-tokens="19">خراسان رضوی</option>
+                      <option value="خراسان شمالی" data-tokens="20">خراسان شمالی</option>
+                      <option value="سمنان" data-tokens="21">سمنان</option>
+                      <option value="فارس" data-tokens="22">فارس</option>
+                      <option value="قم" data-tokens="23">قم</option>
+                      <option value="کردستان" data-tokens="24">کردستان</option>
+                      <option value="کهگیلویه و بویراحمد" data-tokens="25">کهگیلویه و بویراحمد</option>
+                      <option value="گلستان" data-tokens="26">گلستان</option>
+                      <option value="گیلان" data-tokens="27">گیلان</option>
+                      <option value="مازندران" data-tokens="28">مازندران</option>
+                      <option value="مرکزی" data-tokens="29">مرکزی</option>
+                      <option value="هرمزگان" data-tokens="30">هرمزگان</option>
+                      <option value="سیستان و بلوچستان" data-tokens="31">سیستان و بلوچستان</option>
+                    </select>
+                  </div>
+                  <div class="form-group col-md-5 mr-5">
+                    <input placeholder="شهر ارسال" value="<%= old('city') %>" name="city" name="city" type="text" class="form-control">
                   </div>
                 </div>
-              </div>
-              <div class="card-footer " style="text-align: left;">
-                <button type="submit" class="btn btn-fill btn-info">خرید محصول</button>
-              </div>
+              </form>
             </div>
-          </form>
+            <div class="card-footer " style="text-align: left;">
+              <button type="submit" class="btn btn-fill btn-info">خرید محصول</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
+</div>
+
 
 <div class="ps__rail-x" style="left: 0px; top: 0px;">
   <div class="ps__thumb-x" tabindex="0" style="left: 0px; width: 0px;">
-  </div></div><div class="ps__rail-y" style="top: 0px; left: 0px;">
-    <div class="ps__thumb-y" tabindex="0" style="top: 0px; height: 0px;">
-    </div>
   </div>
+</div>
+<div class="ps__rail-y" style="top: 0px; left: 0px;">
+  <div class="ps__thumb-y" tabindex="0" style="top: 0px; height: 0px;">
+  </div>
+</div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.18/dist/js/bootstrap-select.min.js"></script>
 <script>
-    $('.my-select').selectpicker({
-        dir: 'rtl'
-    });
-</script> 
+  $('.my-select').selectpicker({
+    dir: 'rtl'
+  });
+</script>

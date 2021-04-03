@@ -1,6 +1,5 @@
 const controller = require('app/http/controllers/controller');
 const User = require('app/models/user');
-
 class userController extends controller {
     async index(req , res) {
         try {
@@ -75,17 +74,19 @@ class userController extends controller {
             let status = await this.validationData(req);
             if(! status) return this.back(req,res);
 
-            let { name, family, email, address, telephone, password } = req.body;
+            let { name, family, email, address, telephone, password, postalCode, city } = req.body;
             
             await User.findByIdAndUpdate(req.params.id , { $set : { 
                 name,
                 email,
                 family,
                 address, 
-                telephone
+                telephone,
+                city,
+                postalCode
             }});
 
-            if(password !== '') {
+            if(password) {
                 const user = await User.findById(req.params.id);
                 let hash = user.hashPassword(password);
                 user.password = hash;

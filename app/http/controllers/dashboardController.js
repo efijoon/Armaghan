@@ -17,25 +17,17 @@ class DashboardController extends controller {
     }
 
     async updateProfile(req , res) {
+        let { name, family, email, address, telephone, postalCode, city } = req.body;
 
-        let { name, family, email, address, telephone } = req.body;
-
-        if(! name || ! family || ! email || ! address || ! telephone) {
+        if(! name || ! family || ! email || ! address || ! telephone || ! postalCode || ! city) {
             return this.alertAndBack(req, res, {
-              title: 'لطفا تمامی مقدارهای خواسته شده را وارد نمایید.',
+              title: 'لطفا تمامی قسمت ها را وارد نمایید.',
               type: 'error',
               toast: true
             });
         }
 
-        const user = await User.findById(req.user.id);
-
-        user.name = name;
-        user.family = family;
-        user.email = email;
-        user.telephone = telephone;
-        user.address = address;
-        await user.save();
+        await User.findByIdAndUpdate(req.user.id, { ...req.body });
 
         return this.alertAndBack(req, res, {
             title: 'اطلاعات حساب کاربری شما با موفقیت بروز شد',

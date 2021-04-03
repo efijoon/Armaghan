@@ -377,13 +377,26 @@ class ProductController extends controller {
         });
       }
 
-      if(!address || ! telephone || ! email || ! postalCode || ! city || ! province) {
+      if(!address || ! telephone || ! email || ! postalCode || ! city || ! province || ! username) {
         return this.alertAndBack(req, res, {
           title: "لطفا مقادیر خواسته شده را وارد کنید.",
           type: "error",
           toast: true,
           position: "center",
         });
+      }
+
+      const fullName = username.split(' ');
+      if(fullName.length < 2) {
+        this.alert(req, {
+          title: "نام خود را به صورت کامل وارد کنید، مثال: عرفان پورسینا.",
+          type: "error",
+          toast: true,
+          position: "center",
+          timer: 15000
+        });
+
+        return this.back(req, res);
       }
 
       if (!this.just_number(telephone)) {

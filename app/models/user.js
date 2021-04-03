@@ -10,11 +10,13 @@ const userSchema = Schema({
     image : { type : String , default : null },
     address : { type : String , default : null },
     telephone : { type : String , default : null },
+    city : { type : String , default : '' },
     admin : { type : Boolean ,  default : 0 },
     email : { type : String , unique : true  ,required : true},
     password : { type : String ,  required : true },
     money : { type : Number ,  default : 0 },
     points : { type : Number ,  default : 0 },
+    postalCode : { type : Number , default : null },
     products : { type : [
         {
         productId: {
